@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Local Guide</string>
+    <string name="button_addReview">Add Review</string>
+    <string name="hint_reviewTitle">Enter Review Title</string>
 </resources>
