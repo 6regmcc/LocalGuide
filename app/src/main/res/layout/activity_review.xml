@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.localguide.ReviewActivity">
+    tools:context="com.example.localguide.activities.ReviewActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/placemarkTitle"
+                    android:id="@+id/reviewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_margin="8dp"
@@ -55,7 +55,7 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/reviewTextBody"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
@@ -64,7 +64,7 @@
                     android:inputType="textMultiLine" />
 
                 <RatingBar
-                    android:id="@+id/rating"
+                    android:id="@+id/reviewRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
@@ -76,13 +76,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:stateListAnimator="@null"
                     android:text="@string/button_addReview"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    />
+
 
 
             </LinearLayout>
