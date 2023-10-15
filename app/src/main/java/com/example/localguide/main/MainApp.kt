@@ -11,8 +11,6 @@ class MainApp : Application() {
         Timber.plant(Timber.DebugTree())
         i("Local Guide started")
 
-        reviews.add(ReviewModel("One", "About one...",0.0))
-        reviews.add(ReviewModel("Two", "About two...", 0.0))
-        reviews.add(ReviewModel("Three", "About three...", 0.0))
+
     }
 }

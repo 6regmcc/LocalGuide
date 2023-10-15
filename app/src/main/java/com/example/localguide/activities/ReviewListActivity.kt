@@ -1,16 +1,20 @@
 package com.example.localguide.activities
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+
 import android.view.Menu
-import android.view.ViewGroup
+import android.view.MenuItem
+
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+
 import com.example.localguide.R
+import com.example.localguide.adapters.ReviewAdapter
 import com.example.localguide.databinding.ActivityReviewListBinding
-import com.example.localguide.databinding.CardReviewBinding
-import com.example.localguide.models.ReviewModel
+
 import com.example.localguide.main.MainApp
 
 class ReviewListActivity : AppCompatActivity() {
@@ -38,35 +42,26 @@ class ReviewListActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-
-}
-
-class ReviewAdapter constructor(private var placemarks: List<ReviewModel>) :
-    RecyclerView.Adapter<ReviewAdapter.MainHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        val binding = CardReviewBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return MainHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val placemark = placemarks[holder.adapterPosition]
-        holder.bind(placemark)
-    }
-
-
-
-    override fun getItemCount(): Int = placemarks.size
-
-    class MainHolder(private val binding : CardReviewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(review: ReviewModel) {
-            binding.reviewTitle.text = review.title
-            binding.reviewtextBody.text = review.body
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_add -> {
+                val launcherIntent = Intent(this, ReviewActivity::class.java)
+                getResult.launch(launcherIntent)
+            }
         }
+        return super.onOptionsItemSelected(item)
     }
+
+    private val getResult =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                (binding.recyclerView.adapter)?.
+                notifyItemRangeChanged(0,app.reviews.size)
+            }
+        }
+
+
 }
+

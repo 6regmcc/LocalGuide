@@ -2,6 +2,9 @@ package com.example.localguide.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import com.example.localguide.R
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
@@ -20,6 +23,12 @@ class ReviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.toolbarAdd.title = title
+        setSupportActionBar(binding.toolbarAdd)
+
+
+
         app = application as MainApp
         i("Review Activity started..")
 
@@ -33,8 +42,10 @@ class ReviewActivity : AppCompatActivity() {
                 app.reviews.add(review.copy())
                 i("add review button pressed ${review}")
                 for (i in app.reviews.indices)
-                { i("Review[$i]:${this.app.reviews[i]}") }
-
+                    { i("Review[$i]:${this.app.reviews[i]}")
+                }
+                setResult(RESULT_OK)
+                finish()
 
             } else {
                 Snackbar
@@ -43,5 +54,19 @@ class ReviewActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_placemark, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_cancel -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

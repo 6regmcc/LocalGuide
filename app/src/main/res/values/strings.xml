@@ -3,4 +3,5 @@
     <string name="button_addReview">Add Review</string>
     <string name="hint_reviewTitle">Enter Review Title</string>
     <string name="menu_addReview">Add</string>
+    <string name="menu_cancelReview">Cancel</string>
 </resources>
