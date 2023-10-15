@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#efeeb4</color>
+    <color name="colorPrimaryDark">#454d66</color>
+    <color name="colorAccent">#309975</color>
 </resources>
+
+<!--https://colors.muz.li/palette/454d66/309975/58b368/dad873/efeeb4 -->
