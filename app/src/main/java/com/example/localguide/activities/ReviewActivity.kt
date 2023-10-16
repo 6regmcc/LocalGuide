@@ -39,11 +39,8 @@ class ReviewActivity : AppCompatActivity() {
             review.body = binding.reviewTextBody.text.toString()
             review.rating = binding.reviewRating.rating.toDouble()
             if (review.title.isNotEmpty()) {
-                app.reviews.add(review.copy())
+                app.reviews.create(review.copy())
                 i("add review button pressed ${review}")
-                for (i in app.reviews.indices)
-                    { i("Review[$i]:${this.app.reviews[i]}")
-                }
                 setResult(RESULT_OK)
                 finish()
 
