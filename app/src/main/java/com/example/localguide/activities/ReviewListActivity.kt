@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.localguide.R
 import com.example.localguide.adapters.ReviewAdapter
+import com.example.localguide.adapters.ReviewListener
 import com.example.localguide.databinding.ActivityReviewListBinding
 
 import com.example.localguide.main.MainApp
+import com.example.localguide.models.ReviewModel
 
-class ReviewListActivity : AppCompatActivity() {
+class ReviewListActivity : AppCompatActivity(), ReviewListener {
     lateinit var app: MainApp
 
 
@@ -31,7 +33,7 @@ class ReviewListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ReviewAdapter(app.reviews.findAll())
+        binding.recyclerView.adapter = ReviewAdapter(app.reviews.findAll(),this)
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
@@ -41,6 +43,20 @@ class ReviewListActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
+    override fun onReviewClick(review: ReviewModel) {
+        val launcherIntent = Intent(this, ReviewActivity::class.java)
+        getClickResult.launch(launcherIntent)
+    }
+
+    private val getClickResult =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                (binding.recyclerView.adapter)?.
+                notifyItemRangeChanged(0,app.reviews.findAll().size)
+            }
+        }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

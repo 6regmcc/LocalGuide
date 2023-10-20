@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.localguide.databinding.CardReviewBinding
 import com.example.localguide.models.ReviewModel
 
-class ReviewAdapter constructor(private var reviews: List<ReviewModel>) :
+interface ReviewListener {
+    fun onReviewClick(placemark: ReviewModel)
+}
+class ReviewAdapter constructor(private var reviews: List<ReviewModel>, private val listener: ReviewListener) :
     RecyclerView.Adapter<ReviewAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -17,7 +20,7 @@ class ReviewAdapter constructor(private var reviews: List<ReviewModel>) :
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val review = reviews[holder.adapterPosition]
-        holder.bind(review)
+        holder.bind(review, listener)
     }
 
     override fun getItemCount(): Int = reviews.size
@@ -25,9 +28,10 @@ class ReviewAdapter constructor(private var reviews: List<ReviewModel>) :
     class MainHolder(private val binding : CardReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(review: ReviewModel) {
+        fun bind(review: ReviewModel, listener: ReviewListener) {
             binding.reviewTitle.text = review.title
             binding.reviewtextBody.text = review.body
+            binding.root.setOnClickListener { listener.onReviewClick(review) }
         }
     }
 }
