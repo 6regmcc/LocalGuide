@@ -13,6 +13,7 @@ import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
 import com.example.localguide.helpers.showImagePicker
+import com.squareup.picasso.Picasso
 
 
 import timber.log.Timber
@@ -45,6 +46,9 @@ class ReviewActivity : AppCompatActivity() {
             binding.reviewTitle.setText(review.title)
             binding.reviewTextBody.setText(review.body)
             binding.btnAdd.setText(R.string.save_review)
+            Picasso.get()
+                .load(review.image)
+                .into(binding.reviewImage)
         }
 
 
@@ -92,6 +96,8 @@ class ReviewActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
+
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -100,12 +106,18 @@ class ReviewActivity : AppCompatActivity() {
                     RESULT_OK -> {
                         if (result.data != null) {
                             i("Got Result ${result.data!!.data}")
+                            review.image = result.data!!.data!!
+                            Picasso.get()
+                                .load(review.image)
+                                .into(binding.reviewImage)
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
     }
+
+
 
 
 }

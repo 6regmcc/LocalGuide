@@ -50,4 +50,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.github.ajalt:timberkt:1.5.1")
+    implementation("com.squareup.picasso:picasso:2.71828")
 }
