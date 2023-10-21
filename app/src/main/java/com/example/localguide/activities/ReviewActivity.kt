@@ -1,14 +1,18 @@
 package com.example.localguide.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.localguide.R
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
+import com.example.localguide.helpers.showImagePicker
 
 
 import timber.log.Timber
@@ -19,6 +23,9 @@ class ReviewActivity : AppCompatActivity() {
     var review = ReviewModel()
     lateinit var app: MainApp
     var edit = false
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
@@ -62,6 +69,13 @@ class ReviewActivity : AppCompatActivity() {
 
 
         }
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(imageIntentLauncher)
+        }
+
+        registerImagePickerCallback()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,4 +91,21 @@ class ReviewActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun registerImagePickerCallback() {
+        imageIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Result ${result.data!!.data}")
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
+    }
+
+
 }
