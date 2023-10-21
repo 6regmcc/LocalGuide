@@ -8,4 +8,5 @@
     <string name="save_review"> Save Review </string>
     <string name="button_addImage"> Add Image </string>
     <string name="select_review_image">Select review image</string>
+    <string name="change_review_image">Change image</string>
 </resources>

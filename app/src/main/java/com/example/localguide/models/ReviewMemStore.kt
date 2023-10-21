@@ -26,6 +26,7 @@ class ReviewMemStore : ReviewStore {
         if (foundReview != null) {
             foundReview.title = review.title
             foundReview.body = review.body
+            foundReview.image = review.image
             logAll()
         }
     }

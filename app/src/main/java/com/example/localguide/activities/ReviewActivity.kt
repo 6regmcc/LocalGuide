@@ -1,6 +1,7 @@
 package com.example.localguide.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -49,6 +50,9 @@ class ReviewActivity : AppCompatActivity() {
             Picasso.get()
                 .load(review.image)
                 .into(binding.reviewImage)
+            if (review.image != Uri.EMPTY) {
+                binding.chooseImage.setText(R.string.change_review_image)
+            }
         }
 
 
@@ -110,6 +114,7 @@ class ReviewActivity : AppCompatActivity() {
                             Picasso.get()
                                 .load(review.image)
                                 .into(binding.reviewImage)
+                            binding.chooseImage.setText(R.string.change_review_image)
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.localguide.databinding.CardReviewBinding
 import com.example.localguide.models.ReviewModel
+import com.squareup.picasso.Picasso
 
 interface ReviewListener {
     fun onReviewClick(placemark: ReviewModel)
@@ -31,6 +32,7 @@ class ReviewAdapter constructor(private var reviews: List<ReviewModel>, private 
         fun bind(review: ReviewModel, listener: ReviewListener) {
             binding.reviewTitle.text = review.title
             binding.reviewtextBody.text = review.body
+            Picasso.get().load(review.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onReviewClick(review) }
         }
     }
