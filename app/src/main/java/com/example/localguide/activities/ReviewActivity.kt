@@ -32,6 +32,11 @@ class ReviewActivity : AppCompatActivity() {
         app = application as MainApp
         i("Review Activity started..")
 
+        if (intent.hasExtra("review_edit")) {
+            review = intent.extras?.getParcelable("review_edit")!!
+            binding.reviewTitle.setText(review.title)
+            binding.reviewTextBody.setText(review.body)
+        }
 
 
         binding.btnAdd.setOnClickListener() {

@@ -45,6 +45,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
     }
     override fun onReviewClick(review: ReviewModel) {
         val launcherIntent = Intent(this, ReviewActivity::class.java)
+        launcherIntent.putExtra("review_edit", review)
         getClickResult.launch(launcherIntent)
     }
 
