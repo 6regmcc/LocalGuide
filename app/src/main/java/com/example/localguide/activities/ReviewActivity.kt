@@ -26,6 +26,7 @@ class ReviewActivity : AppCompatActivity() {
     lateinit var app: MainApp
     var edit = false
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +83,18 @@ class ReviewActivity : AppCompatActivity() {
             showImagePicker(imageIntentLauncher)
         }
 
+        binding.reviewLocation.setOnClickListener {
+            i ("Set Location Pressed")
+        }
+
+        binding.reviewLocation.setOnClickListener {
+            val launcherIntent = Intent(this, MapActivity::class.java)
+            mapIntentLauncher.launch(launcherIntent)
+        }
+
+
         registerImagePickerCallback()
+        registerMapCallback()
 
     }
 
@@ -120,6 +132,12 @@ class ReviewActivity : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { i("Map Loaded") }
     }
 
 
