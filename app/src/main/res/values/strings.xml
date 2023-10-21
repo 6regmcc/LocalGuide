@@ -4,4 +4,7 @@
     <string name="hint_reviewTitle">Enter Review Title</string>
     <string name="menu_addReview">Add</string>
     <string name="menu_cancelReview">Cancel</string>
+    <string name="enter_review_title"> Please enter a Review Title </string>
+    <string name="save_review"> Save Review </string>
+
 </resources>

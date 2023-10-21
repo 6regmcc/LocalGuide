@@ -18,7 +18,7 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReviewBinding
     var review = ReviewModel()
     lateinit var app: MainApp
-
+    var edit = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReviewBinding.inflate(layoutInflater)
@@ -33,9 +33,11 @@ class ReviewActivity : AppCompatActivity() {
         i("Review Activity started..")
 
         if (intent.hasExtra("review_edit")) {
+            edit = true
             review = intent.extras?.getParcelable("review_edit")!!
             binding.reviewTitle.setText(review.title)
             binding.reviewTextBody.setText(review.body)
+            binding.btnAdd.setText(R.string.save_review)
         }
 
 
@@ -43,17 +45,21 @@ class ReviewActivity : AppCompatActivity() {
             review.title = binding.reviewTitle.text.toString()
             review.body = binding.reviewTextBody.text.toString()
             review.rating = binding.reviewRating.rating.toDouble()
-            if (review.title.isNotEmpty()) {
-                app.reviews.create(review.copy())
-                i("add review button pressed ${review}")
+
+            if (review.title.isEmpty()) {
+                Snackbar.make(it,R.string.enter_review_title, Snackbar.LENGTH_LONG)
+                    .show()
+            } else {
+                if (edit) {
+                    app.reviews.update(review.copy())
+                } else {
+                    app.reviews.create(review.copy())
+                }
                 setResult(RESULT_OK)
                 finish()
-
-            } else {
-                Snackbar
-                    .make(it,"Please Enter a title", Snackbar.LENGTH_LONG)
-                    .show()
             }
+
+
 
         }
     }
