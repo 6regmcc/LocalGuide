@@ -14,6 +14,7 @@ import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
 import com.example.localguide.helpers.showImagePicker
+import com.example.localguide.models.Location
 import com.squareup.picasso.Picasso
 
 
@@ -83,12 +84,12 @@ class ReviewActivity : AppCompatActivity() {
             showImagePicker(imageIntentLauncher)
         }
 
-        binding.reviewLocation.setOnClickListener {
-            i ("Set Location Pressed")
-        }
+
 
         binding.reviewLocation.setOnClickListener {
+            val location = Location(52.245696, -7.139102, 15f)
             val launcherIntent = Intent(this, MapActivity::class.java)
+                .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
 

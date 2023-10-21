@@ -11,19 +11,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.localguide.databinding.ActivityMapBinding
+import com.example.localguide.models.Location
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapBinding
+    private var location = Location()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        location = intent.extras?.getParcelable<Location>("location")!!
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -42,8 +45,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val setu = LatLng(52.245696, -7.139102)
-        mMap.addMarker(MarkerOptions().position(setu).title("Marker in Waterford"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(setu, 16f))
+        val loc = LatLng(location.lat, location.lng)
+        val options = MarkerOptions()
+            .title("Placemark")
+            .snippet("GPS : $loc")
+            .draggable(true)
+            .position(loc)
+        mMap.addMarker(options)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
     }
 }
