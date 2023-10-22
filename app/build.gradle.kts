@@ -53,4 +53,5 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.github.ajalt:timberkt:1.5.1")
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.google.code.gson:gson:2.9.0")
 }

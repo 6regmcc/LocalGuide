@@ -18,7 +18,6 @@ import com.example.localguide.models.Location
 import com.squareup.picasso.Picasso
 
 
-import timber.log.Timber
 import timber.log.Timber.Forest.i
 
 class ReviewActivity : AppCompatActivity() {
@@ -82,7 +81,7 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         binding.chooseImage.setOnClickListener {
-            showImagePicker(imageIntentLauncher)
+            showImagePicker(imageIntentLauncher,this)
         }
 
 
@@ -108,7 +107,7 @@ class ReviewActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_placemark, menu)
+        menuInflater.inflate(R.menu.menu_local_guide, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -152,7 +151,7 @@ class ReviewActivity : AppCompatActivity() {
                         if (result.data != null) {
                             i("Got Location ${result.data.toString()}")
                             val location = result.data!!.extras?.getParcelable<Location>("location")!!
-                            i("Review == $location")
+                            i("Location == $location")
                             review.lat = location.lat
                             review.lng = location.lng
                             review.zoom = location.zoom
