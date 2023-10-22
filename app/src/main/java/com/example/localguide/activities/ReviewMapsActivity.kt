@@ -8,9 +8,10 @@ import com.example.localguide.main.MainApp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-class ReviewMapsActivity : AppCompatActivity() {
+class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener {
 
     private lateinit var binding: ActivityReviewMapsBinding
     private lateinit var contentBinding: ContentReviewMapsBinding
@@ -61,11 +62,17 @@ class ReviewMapsActivity : AppCompatActivity() {
 
     private fun configureMap() {
         map.uiSettings.isZoomControlsEnabled = true
+        map.setOnMarkerClickListener(this)
         app.reviews.findAll().forEach {
             val loc = LatLng(it.lat, it.lng)
             val options = MarkerOptions().title(it.title).position(loc)
             map.addMarker(options)?.tag = it.id
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, it.zoom))
         }
+    }
+    override fun onMarkerClick(marker: Marker): Boolean {
+        contentBinding.currentTitle.text = marker.title
+
+        return false
     }
 }
