@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso
 import timber.log.Timber.Forest.i
 
 class ReviewActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityReviewBinding
     var review = ReviewModel()
     lateinit var app: MainApp
@@ -37,7 +38,7 @@ class ReviewActivity : AppCompatActivity() {
 
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
-
+        edit = false
 
 
         app = application as MainApp
@@ -108,11 +109,17 @@ class ReviewActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_local_guide, menu)
+        if (edit) menu.getItem(0).isVisible = true
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.item_delete -> {
+                setResult(99)
+                app.reviews.delete(review)
+                finish()
+            }
             R.id.item_cancel -> {
                 finish()
             }

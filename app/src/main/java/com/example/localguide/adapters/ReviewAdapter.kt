@@ -8,7 +8,7 @@ import com.example.localguide.models.ReviewModel
 import com.squareup.picasso.Picasso
 
 interface ReviewListener {
-    fun onReviewClick(placemark: ReviewModel)
+    fun onReviewClick(placemark: ReviewModel, position : Int)
 }
 class ReviewAdapter constructor(private var reviews: List<ReviewModel>, private val listener: ReviewListener) :
     RecyclerView.Adapter<ReviewAdapter.MainHolder>() {
@@ -33,7 +33,7 @@ class ReviewAdapter constructor(private var reviews: List<ReviewModel>, private 
             binding.reviewTitle.text = review.title
             binding.reviewtextBody.text = review.body
             Picasso.get().load(review.image).resize(200,200).into(binding.imageIcon)
-            binding.root.setOnClickListener { listener.onReviewClick(review) }
+            binding.root.setOnClickListener { listener.onReviewClick(review,adapterPosition) }
         }
     }
 }

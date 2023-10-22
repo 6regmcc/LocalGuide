@@ -37,4 +37,8 @@ class ReviewMemStore : ReviewStore {
     fun logAll() {
         reviews.forEach{ i("${it}") }
     }
+
+    override fun delete(placemark: ReviewModel) {
+        reviews.remove(placemark)
+    }
 }

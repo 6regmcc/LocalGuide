@@ -73,6 +73,11 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
     private fun logAll() {
         reviews.forEach { Timber.i("$it") }
     }
+
+    override fun delete(placemark: ReviewModel) {
+        reviews.remove(placemark)
+        serialize()
+    }
 }
 
 class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {

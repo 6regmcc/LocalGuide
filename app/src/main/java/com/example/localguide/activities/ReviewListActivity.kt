@@ -21,7 +21,7 @@ import com.example.localguide.models.ReviewModel
 
 class ReviewListActivity : AppCompatActivity(), ReviewListener {
     lateinit var app: MainApp
-
+    private var position: Int = 0
 
     private lateinit var binding: ActivityReviewListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +43,10 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
-    override fun onReviewClick(review: ReviewModel) {
+    override fun onReviewClick(review: ReviewModel, pos : Int) {
         val launcherIntent = Intent(this, ReviewActivity::class.java)
         launcherIntent.putExtra("review_edit", review)
+        position = pos
         getClickResult.launch(launcherIntent)
     }
 
@@ -57,6 +58,8 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
                 (binding.recyclerView.adapter)?.
                 notifyItemRangeChanged(0,app.reviews.findAll().size)
             }
+            else
+                if (it.resultCode == 99)     (binding.recyclerView.adapter)?.notifyItemRemoved(position)
         }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
