@@ -46,6 +46,17 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
 
 
     override fun update(review: ReviewModel) {
+        val reviewsList = findAll() as ArrayList<ReviewModel>
+        var foundReview: ReviewModel? = reviewsList.find { p -> p.id == review.id }
+        if (foundReview != null) {
+            foundReview.title = review.title
+            foundReview.body = review.body
+            foundReview.image = review.image
+            foundReview.lat = review.lat
+            foundReview.lng = review.lng
+            foundReview.zoom = review.zoom
+        }
+        serialize()
         // todo
     }
 
