@@ -28,6 +28,7 @@ class ReviewActivity : AppCompatActivity() {
     var edit = false
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    //var location = Location(52.245696, -7.139102, 15f)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,10 +89,17 @@ class ReviewActivity : AppCompatActivity() {
 
         binding.reviewLocation.setOnClickListener {
             val location = Location(52.245696, -7.139102, 15f)
+            if (review.zoom != 0f) {
+                location.lat =  review.lat
+                location.lng = review.lng
+                location.zoom = review.zoom
+            }
             val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
+
+
 
 
         registerImagePickerCallback()
@@ -138,7 +146,21 @@ class ReviewActivity : AppCompatActivity() {
     private fun registerMapCallback() {
         mapIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { i("Map Loaded") }
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Location ${result.data.toString()}")
+                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            i("Review == $location")
+                            review.lat = location.lat
+                            review.lng = location.lng
+                            review.zoom = location.zoom
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
     }
 
 

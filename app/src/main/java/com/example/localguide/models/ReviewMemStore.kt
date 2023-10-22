@@ -27,6 +27,9 @@ class ReviewMemStore : ReviewStore {
             foundReview.title = review.title
             foundReview.body = review.body
             foundReview.image = review.image
+            foundReview.lat = review.lat
+            foundReview.lng = review.lng
+            foundReview.zoom = review.zoom
             logAll()
         }
     }
