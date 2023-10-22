@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -56,4 +57,5 @@ dependencies {
     implementation("com.github.ajalt:timberkt:1.5.1")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("com.google.code.gson:gson:2.9.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
 }
