@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.squareup.picasso.Picasso
 
 class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener {
 
@@ -71,8 +72,12 @@ class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener
         }
     }
     override fun onMarkerClick(marker: Marker): Boolean {
-        contentBinding.currentTitle.text = marker.title
-
+        //val placemark = marker.tag as PlacemarkModel
+        val tag = marker.tag as Long
+        val review = app.reviews.findById(tag)
+        contentBinding.currentTitle.text = review!!.title
+        contentBinding.currentDescription.text = review!!.body //fix currentDescription.text later
+        Picasso.get().load(review.image).into(contentBinding.currentImage)
         return false
     }
 }

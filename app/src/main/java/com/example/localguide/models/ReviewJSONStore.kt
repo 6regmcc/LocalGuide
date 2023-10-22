@@ -43,7 +43,10 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
         reviews.add(review)
         serialize()
     }
-
+    override fun findById(id:Long) : ReviewModel? {
+        val foundPlacemark: ReviewModel? = reviews.find { it.id == id }
+        return foundPlacemark
+    }
 
     override fun update(review: ReviewModel) {
         val reviewsList = findAll() as ArrayList<ReviewModel>
@@ -96,4 +99,6 @@ class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {
     ): JsonElement {
         return JsonPrimitive(src.toString())
     }
+
+
 }

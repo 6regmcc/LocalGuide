@@ -41,4 +41,9 @@ class ReviewMemStore : ReviewStore {
     override fun delete(placemark: ReviewModel) {
         reviews.remove(placemark)
     }
+
+    override fun findById(id:Long) : ReviewModel? {
+        val foundPlacemark: ReviewModel? = reviews.find { it.id == id }
+        return foundPlacemark
+    }
 }

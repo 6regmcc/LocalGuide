@@ -6,4 +6,6 @@ interface ReviewStore {
     fun update(placemark: ReviewModel)
 
     fun delete(placemark: ReviewModel)
+
+    fun findById(id:Long) : ReviewModel?
 }
