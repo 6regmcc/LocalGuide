@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
-import com.example.localguide.R
-import com.google.android.gms.tasks.OnCompleteListener
+
 import com.example.localguide.databinding.ActivityRegisterBinding
 
 
@@ -67,6 +66,11 @@ class RegisterActivity : AppCompatActivity() {
             }
 
         }
+
+        binding.signIn.setOnClickListener{
+            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+
+        }
     }
 
 
@@ -95,7 +99,7 @@ class RegisterActivity : AppCompatActivity() {
                     i(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
-                        "Signup failed. ${task.exception}",
+                        "Signup failed. ${task.exception?.message}",
                         Toast.LENGTH_LONG,
                     ).show()
                     //updateUI(null)
