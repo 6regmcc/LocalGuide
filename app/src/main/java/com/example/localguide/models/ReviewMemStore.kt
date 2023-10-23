@@ -43,7 +43,7 @@ class ReviewMemStore : ReviewStore {
     }
 
     override fun findById(id:Long) : ReviewModel? {
-        val foundPlacemark: ReviewModel? = reviews.find { it.id == id }
-        return foundPlacemark
+        val foundReview: ReviewModel? = reviews.find { it.id == id }
+        return foundReview
     }
 }
