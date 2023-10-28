@@ -63,6 +63,24 @@
 
                     android:inputType="textMultiLine" />
 
+                <Spinner
+                    android:id="@+id/category_spinner"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="60dp"
+                    />
+
+                <TextView
+                    android:id="@+id/createNewCategoryTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+
+
+                    android:paddingLeft="100dp"
+                    android:paddingRight="20dp"
+                    android:text="Create New Category" />
+
                 <RatingBar
                     android:id="@+id/reviewRating"
                     android:layout_width="wrap_content"

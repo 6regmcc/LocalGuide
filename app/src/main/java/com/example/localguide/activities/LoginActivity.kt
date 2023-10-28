@@ -90,14 +90,14 @@ class LoginActivity : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    updateUI(null)
+                    //updateUI(null)
                 }
             }
         // [END sign_in_with_email]
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        val intent = Intent(this@LoginActivity, ReviewActivity::class.java)
+        val intent = Intent(this@LoginActivity, ReviewListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("user_id", user?.uid)
         intent.putExtra("email", user?.email)

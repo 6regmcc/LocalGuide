@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.localguide.R
@@ -58,6 +60,10 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
+        val spinner: Spinner = binding.categorySpinner
+// Create an ArrayAdapter using the string array and a default spinner layout.
+        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.categories)
+        spinner.adapter = adapter
 
         binding.btnAdd.setOnClickListener() {
             review.title = binding.reviewTitle.text.toString()
@@ -97,6 +103,10 @@ class ReviewActivity : AppCompatActivity() {
             val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
+        }
+
+        binding.createNewCategoryTV.setOnClickListener{
+                startActivity(Intent(this@ReviewActivity, CreateCategoryActivity::class.java))
         }
 
 

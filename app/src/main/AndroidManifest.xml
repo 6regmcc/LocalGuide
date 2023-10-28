@@ -17,11 +17,11 @@
         android:theme="@style/Theme.LocalGuide"
         tools:targetApi="31">
         <activity
+            android:name=".activities.CreateCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegisterActivity"
-            android:exported="false">
-
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true">
@@ -30,8 +30,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
         <activity
             android:name=".activities.ReviewMapsActivity"
