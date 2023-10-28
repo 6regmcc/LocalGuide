@@ -16,6 +16,7 @@ import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
 import com.example.localguide.helpers.showImagePicker
+import com.example.localguide.models.CategoryModel
 import com.example.localguide.models.Location
 import com.squareup.picasso.Picasso
 
@@ -62,7 +63,10 @@ class ReviewActivity : AppCompatActivity() {
 
         val spinner: Spinner = binding.categorySpinner
 // Create an ArrayAdapter using the string array and a default spinner layout.
-        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.categories)
+        val categoryStrArray: MutableList<String> = mutableListOf()
+
+
+        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.categories.getStringArray())
         spinner.adapter = adapter
 
         binding.btnAdd.setOnClickListener() {

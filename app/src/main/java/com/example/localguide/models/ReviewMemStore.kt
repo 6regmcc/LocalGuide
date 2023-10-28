@@ -21,6 +21,8 @@ class ReviewMemStore : ReviewStore {
         logAll()
     }
 
+
+
     override fun update(review: ReviewModel) {
         var foundReview: ReviewModel? = reviews.find { p -> p.id == review.id }
         if (foundReview != null) {
@@ -46,4 +48,6 @@ class ReviewMemStore : ReviewStore {
         val foundReview: ReviewModel? = reviews.find { it.id == id }
         return foundReview
     }
+
+
 }

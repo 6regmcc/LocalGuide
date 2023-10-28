@@ -26,6 +26,7 @@ fun generateRandomId(): Long {
 class ReviewJSONStore(private val context: Context) : ReviewStore {
 
     var reviews = mutableListOf<ReviewModel>()
+    var categories = mutableListOf<String>()
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -43,10 +44,14 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
         reviews.add(review)
         serialize()
     }
+
+
     override fun findById(id:Long) : ReviewModel? {
         val foundPlacemark: ReviewModel? = reviews.find { it.id == id }
         return foundPlacemark
     }
+
+
 
     override fun update(review: ReviewModel) {
         val reviewsList = findAll() as ArrayList<ReviewModel>

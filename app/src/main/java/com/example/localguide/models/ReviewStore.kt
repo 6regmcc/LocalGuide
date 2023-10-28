@@ -8,4 +8,8 @@ interface ReviewStore {
     fun delete(placemark: ReviewModel)
 
     fun findById(id:Long) : ReviewModel?
+
+
+
+
 }
