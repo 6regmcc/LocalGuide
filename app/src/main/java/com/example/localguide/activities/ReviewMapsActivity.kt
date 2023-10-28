@@ -64,7 +64,7 @@ class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener
     private fun configureMap() {
         map.uiSettings.isZoomControlsEnabled = true
         map.setOnMarkerClickListener(this)
-        app.reviews.findAll().forEach {
+        app.combinedStore.findAllReviews().forEach {
             val loc = LatLng(it.lat, it.lng)
             val options = MarkerOptions().title(it.title).position(loc)
             map.addMarker(options)?.tag = it.id
@@ -74,7 +74,7 @@ class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener
     override fun onMarkerClick(marker: Marker): Boolean {
         //val placemark = marker.tag as PlacemarkModel
         val tag = marker.tag as Long
-        val review = app.reviews.findById(tag)
+        val review = app.combinedStore.findReviewById(tag)
         contentBinding.currentTitle.text = review!!.title
         contentBinding.currentDescription.text = review!!.body //fix currentDescription.text later
         Picasso.get().load(review.image).into(contentBinding.currentImage)

@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/createCategoryTV" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/createCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

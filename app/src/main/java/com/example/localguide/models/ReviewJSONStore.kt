@@ -35,7 +35,7 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
     }
 
     override fun findAll(): MutableList<ReviewModel> {
-        logAll()
+        //logAll()
         return reviews
     }
 
@@ -78,12 +78,13 @@ class ReviewJSONStore(private val context: Context) : ReviewStore {
         reviews = gsonBuilder.fromJson(jsonString, listType)
     }
 
+    /*
     private fun logAll() {
         reviews.forEach { Timber.i("$it") }
     }
-
-    override fun delete(placemark: ReviewModel) {
-        reviews.remove(placemark)
+    */
+    override fun delete(review: ReviewModel) {
+        reviews.remove(review)
         serialize()
     }
 }

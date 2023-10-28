@@ -46,8 +46,8 @@ class ReviewActivity : AppCompatActivity() {
 
 
         app = application as MainApp
-        category.categoryName = "Bar"
-        app.categories.create(category)
+        //category.categoryName = "Bar"
+        //app.categories.create(category)
         i("Review Activity started..")
 
         if (intent.hasExtra("review_edit")) {
@@ -69,7 +69,7 @@ class ReviewActivity : AppCompatActivity() {
         //val categoryStrArray: MutableList<String> = mutableListOf()
 
 
-        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.combinedJsonStore.getStrArrOfCategories())
+        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.combinedStore.getStrArrOfCategories())
         spinner.adapter = adapter
 
         binding.btnAdd.setOnClickListener() {
@@ -82,9 +82,9 @@ class ReviewActivity : AppCompatActivity() {
                     .show()
             } else {
                 if (edit) {
-                    app.reviews.update(review.copy())
+                    app.combinedStore.updateReview(review.copy())
                 } else {
-                    app.reviews.create(review.copy())
+                    app.combinedStore.createReview(review.copy())
                 }
                 setResult(RESULT_OK)
                 finish()
@@ -134,7 +134,7 @@ class ReviewActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.item_delete -> {
                 setResult(99)
-                app.reviews.delete(review)
+                app.combinedStore.deleteReview(review)
                 finish()
             }
             R.id.item_cancel -> {

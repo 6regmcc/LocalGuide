@@ -35,11 +35,13 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ReviewAdapter(app.reviews.findAll(),this)
+        binding.recyclerView.adapter = ReviewAdapter(app.combinedStore.findAllReviews(),this)
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -58,7 +60,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
                 (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.reviews.findAll().size)
+                notifyItemRangeChanged(0,app.combinedStore.findAllReviews().size)
             }
             else
                 if (it.resultCode == 99)     (binding.recyclerView.adapter)?.notifyItemRemoved(position)
@@ -89,7 +91,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
                 (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.reviews.findAll().size)
+                notifyItemRangeChanged(0,app.combinedStore.findAllReviews().size)
             }
         }
 

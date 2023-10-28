@@ -3,9 +3,9 @@ package com.example.localguide.models
 interface ReviewStore {
     fun findAll(): List<ReviewModel>
     fun create(review: ReviewModel)
-    fun update(placemark: ReviewModel)
+    fun update(review: ReviewModel)
 
-    fun delete(placemark: ReviewModel)
+    fun delete(review: ReviewModel)
 
     fun findById(id:Long) : ReviewModel?
 

@@ -13,15 +13,15 @@ import com.example.localguide.models.ReviewStore
 import timber.log.Timber
 import timber.log.Timber.Forest.i
 class MainApp : Application() {
-    lateinit var reviews: ReviewStore
-    var categories = CategoryMemStore()
-    lateinit var combinedJsonStore: JSONStore
+    //lateinit var reviews: ReviewStore
+    //var categories = CategoryMemStore()
+    lateinit var combinedStore: JSONStore
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        reviews = ReviewJSONStore(applicationContext)
-        combinedJsonStore = CombinedJSONStore(applicationContext)
-        categories = CategoryMemStore()
+        //reviews = ReviewJSONStore(applicationContext)
+        combinedStore = CombinedJSONStore(applicationContext)
+        //categories = CategoryMemStore()
         //categories.add(CategoryModel("Pub"))
         //categories.add(CategoryModel("Post Office"))
         //categories.add(CategoryModel("Bus Stop"))

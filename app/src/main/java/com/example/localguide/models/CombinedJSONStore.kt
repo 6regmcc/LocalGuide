@@ -39,23 +39,6 @@ class CombinedJSONStore (private val context: Context): JSONStore {
         return combinedJSonObj.categories
     }
 
-    /*
-
-     override fun update(review: ReviewModel) {
-        val reviewsList = findAll() as ArrayList<ReviewModel>
-        var foundReview: ReviewModel? = reviewsList.find { p -> p.id == review.id }
-        if (foundReview != null) {
-            foundReview.title = review.title
-            foundReview.body = review.body
-            foundReview.image = review.image
-            foundReview.lat = review.lat
-            foundReview.lng = review.lng
-            foundReview.zoom = review.zoom
-        }
-        serialize()
-        // todo
-    }
-     */
 
     override fun createCategory(category: CategoryModel) {
         category.id = generateRandomId2()
@@ -75,6 +58,46 @@ class CombinedJSONStore (private val context: Context): JSONStore {
         return categoryStrArray
     }
 
+    override fun findAllReviews(): List<ReviewModel> {
+        logAllReviews()
+        return combinedJSonObj.reviews
+    }
+
+    override fun createReview(review: ReviewModel) {
+        review.id = generateRandomId2()
+        combinedJSonObj.reviews.add(review)
+    }
+
+
+    override fun findReviewById(id: Long): ReviewModel? {
+       val foundReview: ReviewModel? = combinedJSonObj.reviews.find { it.id == id }
+        return foundReview
+    }
+
+    override fun updateReview(review: ReviewModel) {
+        val reviewsList = findAllReviews() as ArrayList<ReviewModel>
+        var foundReview: ReviewModel? = reviewsList.find { p -> p.id == review.id }
+        if (foundReview != null) {
+            foundReview.title = review.title
+            foundReview.body = review.body
+            foundReview.image = review.image
+            foundReview.lat = review.lat
+            foundReview.lng = review.lng
+            foundReview.zoom = review.zoom
+        }
+        serialize()
+    }
+
+    override fun deleteReview(review: ReviewModel) {
+        combinedJSonObj.reviews.remove(review)
+        serialize()
+    }
+
+
+
+    private fun logAllReviews() {
+        combinedJSonObj.reviews.forEach { Timber.i("$it") }
+    }
 
     private fun serialize() {
         val jsonString = gsonBuilder2.toJson(combinedJSonObj, listType2)
@@ -86,9 +109,7 @@ class CombinedJSONStore (private val context: Context): JSONStore {
         combinedJSonObj = gsonBuilder2.fromJson(jsonString, listType2)
     }
 
-    private fun logAll() {
-        //combinedJSonObj.forEach { Timber.i("$it") }
-    }
+
 
 
 
@@ -111,6 +132,8 @@ class UriParser2 : JsonDeserializer<Uri>,JsonSerializer<Uri> {
     ): JsonElement {
         return JsonPrimitive(src.toString())
     }
+
+
 
 
 }
