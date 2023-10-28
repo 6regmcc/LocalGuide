@@ -1,5 +1,14 @@
 package com.example.localguide.models
 
+import timber.log.Timber
+
+
+var lastCategoryId = 0L
+
+internal fun getIdCategory(): Long {
+    return lastId++
+}
+
 class CategoryMemStore : CategoryStore {
 
     val categories = ArrayList<CategoryModel>()
@@ -8,7 +17,9 @@ class CategoryMemStore : CategoryStore {
     }
 
     override fun create(category: CategoryModel) {
-        TODO("Not yet implemented")
+        category.id = getIdCategory()
+        categories.add(category)
+        logAll()
     }
 
     override fun update(category: CategoryModel) {
@@ -22,5 +33,9 @@ class CategoryMemStore : CategoryStore {
         }
 
         return stringList
+    }
+
+    fun logAll() {
+        categories.forEach{ Timber.i("${it}") }
     }
 }

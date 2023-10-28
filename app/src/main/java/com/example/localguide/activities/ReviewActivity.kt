@@ -27,6 +27,7 @@ class ReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReviewBinding
     var review = ReviewModel()
+    var category = CategoryModel()
     lateinit var app: MainApp
     var edit = false
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
@@ -45,6 +46,8 @@ class ReviewActivity : AppCompatActivity() {
 
 
         app = application as MainApp
+        category.categoryName = "Bar"
+        app.categories.create(category)
         i("Review Activity started..")
 
         if (intent.hasExtra("review_edit")) {
