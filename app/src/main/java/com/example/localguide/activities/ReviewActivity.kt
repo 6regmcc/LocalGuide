@@ -65,11 +65,10 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         val spinner: Spinner = binding.categorySpinner
-// Create an ArrayAdapter using the string array and a default spinner layout.
-        //val categoryStrArray: MutableList<String> = mutableListOf()
 
-
-        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, app.combinedStore.getStrArrOfCategories())
+        val arrayOrSpinner = app.combinedStore.getStrArrOfCategories()
+        arrayOrSpinner.add(0,"Select Category")
+        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, arrayOrSpinner)
         spinner.adapter = adapter
 
         binding.btnAdd.setOnClickListener() {
