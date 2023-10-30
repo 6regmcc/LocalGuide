@@ -1,3 +1,5 @@
+
+/*
 package com.example.localguide.models
 
 import android.content.Context
@@ -108,3 +110,6 @@ class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {
 
 
 }
+
+
+ */

@@ -18,6 +18,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.example.localguide.helpers.showImagePicker
 import com.example.localguide.models.CategoryModel
 import com.example.localguide.models.Location
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.squareup.picasso.Picasso
 
 
@@ -32,6 +35,7 @@ class ReviewActivity : AppCompatActivity() {
     var edit = false
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var auth: FirebaseAuth
     //var location = Location(52.245696, -7.139102, 15f)
 
 
@@ -43,6 +47,8 @@ class ReviewActivity : AppCompatActivity() {
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
         edit = false
+        auth = Firebase.auth
+        val user = Firebase.auth.currentUser
 
 
         app = application as MainApp
@@ -76,6 +82,9 @@ class ReviewActivity : AppCompatActivity() {
             review.title = binding.reviewTitle.text.toString()
             review.body = binding.reviewTextBody.text.toString()
             review.rating = binding.reviewRating.rating.toDouble()
+            if (user != null) {
+                review.userId = user.uid
+            }
 
             if (review.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_review_title, Snackbar.LENGTH_LONG)

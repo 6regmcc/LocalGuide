@@ -7,7 +7,7 @@ import com.example.localguide.models.CategoryModel
 import com.example.localguide.models.CategoryStore
 import com.example.localguide.models.CombinedJSONStore
 import com.example.localguide.models.JSONStore
-import com.example.localguide.models.ReviewJSONStore
+//import com.example.localguide.models.ReviewJSONStore
 import com.example.localguide.models.ReviewMemStore
 import com.example.localguide.models.ReviewStore
 import timber.log.Timber

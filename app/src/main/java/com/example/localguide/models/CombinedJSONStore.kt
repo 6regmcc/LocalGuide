@@ -13,11 +13,11 @@ import timber.log.Timber
 import java.lang.reflect.Type
 import java.util.Random
 
-const val NEW_JSON_FILE = "localGuide.json"
-val gsonBuilder2: Gson = GsonBuilder().setPrettyPrinting()
+const val JSON_FILE = "localGuide.json"
+val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()
     .registerTypeAdapter(Uri::class.java, UriParser())
     .create()
-val listType2: Type = object : TypeToken<JSONModel>() {}.type
+val listType: Type = object : TypeToken<JSONModel>() {}.type
 
 fun generateRandomId2(): Long {
     return Random().nextLong()
@@ -28,7 +28,7 @@ class CombinedJSONStore (private val context: Context): JSONStore {
      var combinedJSonObj: JSONModel = JSONModel()
 
     init {
-        if (exists(context, NEW_JSON_FILE)) {
+        if (exists(context, JSON_FILE)) {
             deserialize()
         }
 
@@ -99,13 +99,13 @@ class CombinedJSONStore (private val context: Context): JSONStore {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder2.toJson(combinedJSonObj, listType2)
-        write(context, NEW_JSON_FILE, jsonString)
+        val jsonString = gsonBuilder.toJson(combinedJSonObj, listType)
+        write(context, JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
-        val jsonString = read(context, NEW_JSON_FILE)
-        combinedJSonObj = gsonBuilder2.fromJson(jsonString, listType2)
+        val jsonString = read(context, JSON_FILE)
+        combinedJSonObj = gsonBuilder.fromJson(jsonString, listType)
     }
 
     override fun createReview(review: ReviewModel) {
@@ -121,7 +121,7 @@ class CombinedJSONStore (private val context: Context): JSONStore {
 
 }
 
-class UriParser2 : JsonDeserializer<Uri>,JsonSerializer<Uri> {
+class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,

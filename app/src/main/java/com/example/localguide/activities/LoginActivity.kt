@@ -20,13 +20,13 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
-    //lateinit var app: MainApp
+    lateinit var app: MainApp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = Firebase.auth
-        //app = application as MainApp
+        app = application as MainApp
 
         val email = intent.getStringExtra("email")
         binding.userEmailInput.setText(email)
@@ -80,14 +80,6 @@ class LoginActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     i("User id is ${user?.uid}")
                     i("User email is ${user?.email}")
-                    val userToSave = user?.uid?.let { user.email?.let { it1 ->
-                        UserModel("Name", it,
-                            it1
-                        )
-                    } }
-                    if (userToSave != null) {
-                        //app.combinedStore.createUser(userToSave)
-                    }
 
                     Toast.makeText(
                         baseContext,
