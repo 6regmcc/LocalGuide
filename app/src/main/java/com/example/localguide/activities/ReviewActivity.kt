@@ -55,6 +55,7 @@ class ReviewActivity : AppCompatActivity() {
             review = intent.extras?.getParcelable("review_edit")!!
             binding.reviewTitle.setText(review.title)
             binding.reviewTextBody.setText(review.body)
+            binding.reviewRating.rating = review.rating.toFloat()
             binding.btnAdd.setText(R.string.save_review)
             Picasso.get()
                 .load(review.image)
