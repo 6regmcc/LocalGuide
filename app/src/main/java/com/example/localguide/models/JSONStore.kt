@@ -16,4 +16,6 @@ interface JSONStore {
     fun deleteReview(review: ReviewModel)
 
     fun findReviewById(id:Long) : ReviewModel?
+
+    fun createUser(user: UserModel)
 }

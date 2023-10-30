@@ -25,7 +25,7 @@ fun generateRandomId2(): Long {
 
 class CombinedJSONStore (private val context: Context): JSONStore {
 
-     lateinit var combinedJSonObj: JSONModel
+     var combinedJSonObj: JSONModel = JSONModel()
 
     init {
         if (exists(context, NEW_JSON_FILE)) {
@@ -63,16 +63,15 @@ class CombinedJSONStore (private val context: Context): JSONStore {
         return combinedJSonObj.reviews
     }
 
-    override fun createReview(review: ReviewModel) {
-        review.id = generateRandomId2()
-        combinedJSonObj.reviews.add(review)
-    }
-
-
     override fun findReviewById(id: Long): ReviewModel? {
        val foundReview: ReviewModel? = combinedJSonObj.reviews.find { it.id == id }
         return foundReview
     }
+
+    override fun createUser(user: UserModel) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun updateReview(review: ReviewModel) {
         val reviewsList = findAllReviews() as ArrayList<ReviewModel>
@@ -107,6 +106,12 @@ class CombinedJSONStore (private val context: Context): JSONStore {
     private fun deserialize() {
         val jsonString = read(context, NEW_JSON_FILE)
         combinedJSonObj = gsonBuilder2.fromJson(jsonString, listType2)
+    }
+
+    override fun createReview(review: ReviewModel) {
+        review.id = generateRandomId2()
+        combinedJSonObj.reviews.add(review)
+        serialize()
     }
 
 
