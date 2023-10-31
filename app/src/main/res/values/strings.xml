@@ -19,6 +19,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="enter_new_category">Please enter a category</string>
+    <string name="select_new_category">Please select a category</string>
 
 
 </resources>

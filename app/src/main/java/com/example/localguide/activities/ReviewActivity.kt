@@ -66,6 +66,7 @@ class ReviewActivity : AppCompatActivity() {
             binding.reviewTextBody.setText(review.body)
             binding.reviewRating.rating = review.rating.toFloat()
             binding.btnAdd.setText(R.string.save_review)
+            binding.autoCompleteTextView.setText(review.category)
             Picasso.get()
                 .load(review.image)
                 .into(binding.reviewImage)
@@ -84,12 +85,16 @@ class ReviewActivity : AppCompatActivity() {
             review.title = binding.reviewTitle.text.toString()
             review.body = binding.reviewTextBody.text.toString()
             review.rating = binding.reviewRating.rating.toDouble()
+            review.category = binding.autoCompleteTextView.text.toString()
             if (user != null) {
                 review.userId = user.uid
             }
 
             if (review.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_review_title, Snackbar.LENGTH_LONG)
+                    .show()
+            } else if (review.category.equals("Select Category")) {
+                Snackbar.make(it,R.string.select_new_category, Snackbar.LENGTH_LONG)
                     .show()
             } else {
                 if (edit) {
