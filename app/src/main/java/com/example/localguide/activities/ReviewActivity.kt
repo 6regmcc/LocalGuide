@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.localguide.R
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.main.MainApp
@@ -73,10 +74,10 @@ class ReviewActivity : AppCompatActivity() {
 
         val spinner: Spinner = binding.categorySpinner
 
-        val arrayOrSpinner = app.combinedStore.getStrArrOfCategories()
-        arrayOrSpinner.add(0,"Select Category")
-        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, arrayOrSpinner)
-        spinner.adapter = adapter
+        val categoryArrayOfStrings = app.combinedStore.getStrArrOfCategories()
+
+        val adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, categoryArrayOfStrings)
+        binding.autoCompleteTextView.setAdapter(adapter)
 
         binding.btnAdd.setOnClickListener() {
             review.title = binding.reviewTitle.text.toString()
