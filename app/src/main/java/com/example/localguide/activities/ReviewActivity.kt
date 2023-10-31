@@ -37,6 +37,8 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var auth: FirebaseAuth
+    lateinit var categoryArrayOfStrings: MutableList<String>
+    lateinit var adapter: ArrayAdapter<String>
     //var location = Location(52.245696, -7.139102, 15f)
 
 
@@ -72,11 +74,10 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
-        val spinner: Spinner = binding.categorySpinner
 
-        val categoryArrayOfStrings = app.combinedStore.getStrArrOfCategories()
+        categoryArrayOfStrings = app.combinedStore.getStrArrOfCategories()
 
-        val adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, categoryArrayOfStrings)
+        adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, categoryArrayOfStrings)
         binding.autoCompleteTextView.setAdapter(adapter)
 
         binding.btnAdd.setOnClickListener() {
@@ -194,6 +195,14 @@ class ReviewActivity : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        categoryArrayOfStrings = app.combinedStore.getStrArrOfCategories()
+        adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, categoryArrayOfStrings)
+        binding.autoCompleteTextView.setAdapter(adapter)
     }
 
 
