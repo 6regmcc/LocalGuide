@@ -8,6 +8,9 @@ import com.google.gson.reflect.TypeToken
 import com.example.localguide.helpers.exists
 import com.example.localguide.helpers.read
 import com.example.localguide.helpers.write
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 import timber.log.Timber
 import java.lang.reflect.Type
@@ -26,6 +29,8 @@ fun generateRandomId2(): Long {
 class CombinedJSONStore (private val context: Context): JSONStore {
 
      var combinedJSonObj: JSONModel = JSONModel()
+     var auth: FirebaseAuth = Firebase.auth
+
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -69,7 +74,16 @@ class CombinedJSONStore (private val context: Context): JSONStore {
     }
 
     override fun createUser(user: UserModel) {
-        TODO("Not yet implemented")
+        combinedJSonObj.users.add(user)
+    }
+
+    override fun getCurrentUserId(): String {
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            return user.uid
+        } else {
+            return "no id"
+        }
     }
 
 

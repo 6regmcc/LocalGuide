@@ -7,6 +7,8 @@ import android.text.TextUtils
 import android.widget.Toast
 
 import com.example.localguide.databinding.ActivityRegisterBinding
+import com.example.localguide.main.MainApp
+import com.example.localguide.models.UserModel
 
 
 import com.google.firebase.auth.FirebaseAuth
@@ -19,13 +21,15 @@ import timber.log.Timber.Forest.i
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
+    lateinit var app: MainApp
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = Firebase.auth
 
-
+        app = application as MainApp
 
         binding.registerLoginButton.setOnClickListener{
 
@@ -59,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
                     val email: String = binding.registerUserEmailInput.text.toString().trim {it <= ' '}
                     val password: String = binding.registerUserPasswordInput.text.toString().trim {it <= ' '}
                     val name: String = binding.registerUserName.text.toString().trim {it <= ' '}
-                    createAccount(email, password)
+                    createAccount(email, password, name)
                 }
 
 
@@ -74,7 +78,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-    private fun createAccount(email: String, password: String) {
+    private fun createAccount(email: String, password: String, name: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -82,16 +86,26 @@ class RegisterActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     i(TAG, "createUserWithEmail:success")
 
-                    val user = auth.currentUser
-                    i("User id is ${user?.uid}")
-                    i("User email is ${user?.email}")
+                    val firebaseUser = auth.currentUser
+                    i("User id is ${firebaseUser?.uid}")
+                    i("User email is ${firebaseUser?.email}")
+                    val userToSave = UserModel()
+                    userToSave.userName = name
+                    if (firebaseUser != null) {
+                        userToSave.userId = firebaseUser.uid
+                    }
+                    if (firebaseUser != null) {
+                        userToSave.userEmailAddress = firebaseUser.email.toString()
+                    }
+
+                    app.combinedStore.createUser(userToSave)
                     Toast.makeText(
                         baseContext,
                         "Account Registered Successfully.",
                         Toast.LENGTH_SHORT,
                     ).show()
 
-                    updateUI(user)
+                    updateUI(firebaseUser)
 
 
                 } else {

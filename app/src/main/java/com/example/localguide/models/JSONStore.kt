@@ -18,4 +18,8 @@ interface JSONStore {
     fun findReviewById(id:Long) : ReviewModel?
 
     fun createUser(user: UserModel)
+
+    fun getCurrentUserId(): String
+
+
 }
