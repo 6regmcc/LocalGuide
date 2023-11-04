@@ -19,11 +19,18 @@ import com.example.localguide.databinding.ActivityReviewListBinding
 
 import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
+import com.google.android.material.switchmaterial.SwitchMaterial
 
+import timber.log.Timber.Forest.i
 
 class ReviewListActivity : AppCompatActivity(), ReviewListener {
     lateinit var app: MainApp
     private var position: Int = 0
+    lateinit var allReviews: List<ReviewModel>
+    lateinit var myReviews: List<ReviewModel>
+    lateinit var switch: SwitchMaterial
+    lateinit var adapterArray: List<ReviewModel>
+    var showMyReviewSwitchState = false
 
     private lateinit var binding: ActivityReviewListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,19 +40,41 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
 
         app = application as MainApp
 
+        allReviews = app.combinedStore.findAllReviews()
+        myReviews = app.combinedStore.findMyReviews()
+
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ReviewAdapter(app.combinedStore.findAllReviews(),this)
+        binding.recyclerView.adapter = ReviewAdapter(allReviews,this)
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
+
+        switch = binding.materialSwitch
+        switch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+
+                i("isChecked found ${myReviews.size} reviews")
+                binding.recyclerView.adapter = ReviewAdapter(myReviews,this)
+                binding.recyclerView.adapter?.notifyDataSetChanged()
+            } else {
+
+                i("isNotChecked found ${allReviews.size} reviews")
+                binding.recyclerView.adapter = ReviewAdapter(allReviews,this)
+                binding.recyclerView.adapter?.notifyDataSetChanged()
+            }
+
+        }
     }
 
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
         return super.onCreateOptionsMenu(menu)
+
+
     }
     override fun onReviewClick(review: ReviewModel, pos : Int) {
         val launcherIntent = Intent(this, ReviewActivity::class.java)

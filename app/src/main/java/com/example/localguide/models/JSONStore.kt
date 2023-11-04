@@ -10,6 +10,7 @@ interface JSONStore {
 
 
     fun findAllReviews(): List<ReviewModel>
+    fun findMyReviews(): List<ReviewModel>
     fun createReview(review: ReviewModel)
     fun updateReview(review: ReviewModel)
 

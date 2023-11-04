@@ -68,6 +68,11 @@ class CombinedJSONStore (private val context: Context): JSONStore {
         return combinedJSonObj.reviews
     }
 
+    override fun findMyReviews(): List<ReviewModel> {
+       return findAllReviews().filter {it.userId.equals(getCurrentUserId())}
+
+    }
+
     override fun findReviewById(id: Long): ReviewModel? {
        val foundReview: ReviewModel? = combinedJSonObj.reviews.find { it.id == id }
         return foundReview
