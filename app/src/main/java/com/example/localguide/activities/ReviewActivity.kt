@@ -86,9 +86,10 @@ class ReviewActivity : AppCompatActivity() {
             review.body = binding.reviewTextBody.text.toString()
             review.rating = binding.reviewRating.rating.toDouble()
             review.category = binding.autoCompleteTextView.text.toString()
-            if (user != null) {
-                review.userId = user.uid
+            if(!edit) {
+                review.userId = app.combinedStore.getCurrentUserId()
             }
+
 
             if (review.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_review_title, Snackbar.LENGTH_LONG)
