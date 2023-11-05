@@ -28,10 +28,11 @@ class ReviewAdapter constructor(private var reviews: List<ReviewModel>, private 
 
     class MainHolder(private val binding : CardReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
+j
         fun bind(review: ReviewModel, listener: ReviewListener) {
             binding.reviewTitle.text = review.title
             binding.reviewtextBody.text = review.body
+            binding.reviewRatingCard.rating = review.rating.toFloat()
             Picasso.get().load(review.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onReviewClick(review,adapterPosition) }
         }
