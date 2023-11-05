@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="20dp"
+    app:layout_marginBaseline="20dp"
     tools:context="com.example.localguide.activities.ReviewActivity">
 
     <RelativeLayout
@@ -44,103 +53,120 @@
                 <EditText
                     android:id="@+id/reviewTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginStart="20dp"
                     android:autofillHints="hint"
                     android:hint="@string/hint_reviewTitle"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
-                    android:padding="8dp"
+                    android:padding="20dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp" />
 
                 <EditText
+
                     android:id="@+id/reviewTextBody"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
+                    android:padding="20dp"
                     android:gravity="start|top"
+                    android:hint="@string/enter_review_text"
+                    android:inputType="textMultiLine"
+                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    />
 
-                    android:inputType="textMultiLine" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginStart="20dp"
+                    android:hint="Category"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="32dp"
-                        android:layout_marginEnd="32dp"
-                        android:hint="Category"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="none"
+                        android:text="Select Category" />
 
-                        <AutoCompleteTextView
-                            android:id="@+id/autoCompleteTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:inputType="none"
-                            android:text="Select Category" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
                     android:id="@+id/createNewCategoryTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+
+                    android:layout_gravity="right"
                     android:padding="20dp"
-
-
                     android:paddingLeft="100dp"
                     android:paddingRight="20dp"
-                    android:text="Create New Category" />
+                    android:text="Create New Category"
+                    android:textStyle="bold" />
 
                 <RatingBar
                     android:id="@+id/reviewRating"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginStart="20dp"
+                    android:isIndicator="false"
                     android:numStars="5"
-                    android:stepSize="0.5"
-                    android:isIndicator="false" />
+                    android:stepSize="0.5" />
 
                 <Button
                     android:id="@+id/chooseImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="8dp"
+
                     android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:text="@string/button_addImage"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/reviewImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/ic_launcher"/>
+                    app:srcCompat="@mipmap/ic_launcher" />
 
                 <Button
                     android:id="@+id/reviewLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="8dp"
+
                     android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:stateListAnimator="@null"
                     android:text="@string/button_location"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/btnAdd"
@@ -152,9 +178,7 @@
                     android:stateListAnimator="@null"
                     android:text="@string/button_addReview"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
-                    />
-
+                    android:textSize="16sp" />
 
 
             </LinearLayout>
