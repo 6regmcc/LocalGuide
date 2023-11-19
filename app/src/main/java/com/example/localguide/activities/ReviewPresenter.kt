@@ -2,15 +2,20 @@ package com.example.localguide.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.localguide.R
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.helpers.showImagePicker
 import com.example.localguide.main.MainApp
 import com.example.localguide.models.CategoryModel
 import com.example.localguide.models.Location
 import com.example.localguide.models.ReviewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import timber.log.Timber
 
 class ReviewPresenter (private val view: ReviewView) {
@@ -22,6 +27,9 @@ class ReviewPresenter (private val view: ReviewView) {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     var edit = false;
+    lateinit var adapter: ArrayAdapter<String>
+    private lateinit var auth: FirebaseAuth
+
 
     init {
         if (view.intent.hasExtra("review_edit")) {
@@ -74,9 +82,16 @@ class ReviewPresenter (private val view: ReviewView) {
     }
 
 
-    fun doAddOrSave(title: String, body: String) {
+    fun doAddOrSave(title: String, body: String, rating: Float, category: String) {
+        var auth = Firebase.auth
+        val user = Firebase.auth.currentUser
         review.title = title
         review.body = body
+        review.rating = rating.toDouble()
+        review.category = category
+        if (user != null) {
+            review.userId = user.uid
+        }
         if (edit) {
             app.combinedStore.updateReview(review)
         } else {
@@ -103,18 +118,25 @@ class ReviewPresenter (private val view: ReviewView) {
             location.lng = review.lng
             location.zoom = review.zoom
         }
-        val launcherIntent = Intent(view, ReviewMapsActivity::class.java)
+        val launcherIntent = Intent(view, MapActivity::class.java)
             .putExtra("location", location)
         mapIntentLauncher.launch(launcherIntent)
     }
 
-    fun cachePlacemark (title: String, body: String) {
+    fun cacheReview (title: String, body: String, rating: Float, category: String) {
         review.title = title;
         review.body = body
+        review.rating = rating.toDouble()
+        review.category = category
+
     }
 
     fun doSelectImage() {
         showImagePicker(imageIntentLauncher,view)
+    }
+
+    fun categoryDropdownArrOfStrings(): MutableList<String> {
+        return app.combinedStore.getStrArrOfCategories()
     }
 
 }

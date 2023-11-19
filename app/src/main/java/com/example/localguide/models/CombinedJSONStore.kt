@@ -102,6 +102,8 @@ class CombinedJSONStore (private val context: Context): JSONStore {
             foundReview.lat = review.lat
             foundReview.lng = review.lng
             foundReview.zoom = review.zoom
+            foundReview.rating = review.rating
+            foundReview.category = review.category
         }
         serialize()
     }

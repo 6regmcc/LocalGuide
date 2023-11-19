@@ -49,32 +49,21 @@ class ReviewView : AppCompatActivity() {
 
         presenter = ReviewPresenter(this)
 
-       //come back to thsi
 
-
-
-
-
-
-
-
-
-        //categoryArrayOfStrings = app.combinedStore.getStrArrOfCategories()
-
-        //adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, categoryArrayOfStrings)
-        //binding.autoCompleteTextView.setAdapter(adapter)
+        adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, presenter.categoryDropdownArrOfStrings())
+        binding.autoCompleteTextView.setAdapter(adapter)
 
 
 
         binding.chooseImage.setOnClickListener {
-            presenter.cachePlacemark(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString())
+            presenter.cacheReview(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString(), binding.reviewRating.rating, binding.autoCompleteTextView.text.toString())
             presenter.doSelectImage()
         }
 
 
 
         binding.reviewLocation.setOnClickListener {
-            presenter.cachePlacemark(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString())
+            presenter.cacheReview(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString(), binding.reviewRating.rating, binding.autoCompleteTextView.text.toString())
             presenter.doSetLocation()
         }
 
@@ -105,7 +94,7 @@ class ReviewView : AppCompatActivity() {
                         .show()
                 } else {
                     // presenter.cachePlacemark(binding.placemarkTitle.text.toString(), binding.description.text.toString())
-                    presenter.doAddOrSave(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString())
+                    presenter.doAddOrSave(binding.reviewTitle.text.toString(), binding.reviewTextBody.text.toString(), binding.reviewRating.rating, binding.autoCompleteTextView.text.toString())
                 }
             }
             R.id.item_delete -> {
@@ -123,6 +112,8 @@ class ReviewView : AppCompatActivity() {
     fun showReview(review: ReviewModel) {
         binding.reviewTitle.setText(review.title)
         binding.reviewTextBody.setText(review.body)
+        binding.reviewRating.rating = review.rating.toFloat()
+        binding.autoCompleteTextView.setText(review.category)
         Picasso.get()
             .load(review.image)
             .into(binding.reviewImage)
