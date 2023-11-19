@@ -22,6 +22,7 @@
     <string name="select_new_category">Please select a category</string>
     <string name="my_reviews_switch_text">Show only my Reviews</string>
     <string name="enter_review_text">Enter Review Text</string>
+    <string name="menu_saveReview">Save Review</string>
 
 
 </resources>

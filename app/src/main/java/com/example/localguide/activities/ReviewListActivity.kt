@@ -77,7 +77,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
 
     }
     override fun onReviewClick(review: ReviewModel, pos : Int) {
-        val launcherIntent = Intent(this, ReviewActivity::class.java)
+        val launcherIntent = Intent(this, ReviewView::class.java)
         launcherIntent.putExtra("review_edit", review)
         position = pos
         getClickResult.launch(launcherIntent)
@@ -98,7 +98,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_add -> {
-                val launcherIntent = Intent(this, ReviewActivity::class.java)
+                val launcherIntent = Intent(this, ReviewView::class.java)
                 getResult.launch(launcherIntent)
             }
             R.id.item_map -> {

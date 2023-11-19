@@ -58,7 +58,7 @@
             -->
         </activity>
         <activity
-            android:name=".activities.ReviewActivity"
+            android:name=".activities.ReviewView"
             android:exported="true" />
     </application>
 
