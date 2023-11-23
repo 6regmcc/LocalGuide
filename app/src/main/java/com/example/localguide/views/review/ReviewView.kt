@@ -45,6 +45,7 @@ class ReviewView : AppCompatActivity() {
 
 
         adapter = ArrayAdapter<String>(this, R.layout.dropdown_item, presenter.categoryDropdownArrOfStrings())
+
         binding.autoCompleteTextView.setAdapter(adapter)
 
 

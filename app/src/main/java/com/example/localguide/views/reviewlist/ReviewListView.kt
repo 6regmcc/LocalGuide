@@ -39,8 +39,8 @@ class ReviewListView : AppCompatActivity(), ReviewListener {
         app = application as MainApp
 
         presenter = ReviewListPresenter(this)
-        myReviews = app.combinedStore.findMyReviews()
-        allReviews = app.combinedStore.findAllReviews()
+        //myReviews = presenter.getFilteredReviews()
+        //allReviews = presenter.getReviews()
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
@@ -54,15 +54,14 @@ class ReviewListView : AppCompatActivity(), ReviewListener {
         switch = binding.materialSwitch
         switch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-
-                i("isChecked found ${myReviews.size} reviews")
-                binding.recyclerView.adapter = ReviewAdapter(myReviews,this)
-                binding.recyclerView.adapter?.notifyDataSetChanged()
+                i("isChecked found ${presenter.getFilteredReviews().size} reviews")
+                loadFilteredReviews()
+                //binding.recyclerView.adapter?.notifyDataSetChanged()
             } else {
 
-                i("isNotChecked found ${allReviews.size} reviews")
-                binding.recyclerView.adapter = ReviewAdapter(allReviews,this)
-                binding.recyclerView.adapter?.notifyDataSetChanged()
+                i("isNotChecked found ${presenter.getReviews().size} reviews")
+                loadReviews()
+
             }
 
         }
@@ -92,6 +91,11 @@ class ReviewListView : AppCompatActivity(), ReviewListener {
        binding.recyclerView.adapter = ReviewAdapter(presenter.getReviews(), this)
        onRefresh()
    }
+
+    private fun loadFilteredReviews() {
+        binding.recyclerView.adapter = ReviewAdapter(presenter.getFilteredReviews(),this)
+        onRefresh()
+    }
 
     fun onRefresh() {
         binding.recyclerView.adapter?.

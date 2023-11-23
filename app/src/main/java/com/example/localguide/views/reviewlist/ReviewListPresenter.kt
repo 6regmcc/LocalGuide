@@ -24,6 +24,8 @@ class ReviewListPresenter (val view: ReviewListView) {
 
     fun getReviews() = app.combinedStore.findAllReviews()
 
+    fun getFilteredReviews() = app.combinedStore.findMyReviews()
+
     fun doAddReview() {
         val launcherIntent = Intent(view, ReviewView::class.java)
         refreshIntentLauncher.launch(launcherIntent)
@@ -41,6 +43,9 @@ class ReviewListPresenter (val view: ReviewListView) {
         mapIntentLauncher.launch(launcherIntent)
     }
 
+
+
+
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             view.registerForActivityResult(
@@ -57,6 +62,8 @@ class ReviewListPresenter (val view: ReviewListView) {
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             {  }
     }
+
+
 
 
 
