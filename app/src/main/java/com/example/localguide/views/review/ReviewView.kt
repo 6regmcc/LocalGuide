@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import com.example.localguide.R
-import com.example.localguide.activities.CreateCategoryActivity
+import com.example.localguide.views.createcategory.CreateCategoryView
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
@@ -63,7 +63,7 @@ class ReviewView : AppCompatActivity() {
         }
 
         binding.createNewCategoryTV.setOnClickListener{
-                startActivity(Intent(this@ReviewView, CreateCategoryActivity::class.java))
+                startActivity(Intent(this@ReviewView, CreateCategoryView::class.java))
         }
 
 
