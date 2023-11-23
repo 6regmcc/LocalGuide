@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.localguide.activities.MapActivity
+import com.example.localguide.views.editlocation.EditLocationView
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.helpers.showImagePicker
 import com.example.localguide.main.MainApp
@@ -118,7 +118,7 @@ class ReviewPresenter (private val view: ReviewView) {
             location.lng = review.lng
             location.zoom = review.zoom
         }
-        val launcherIntent = Intent(view, MapActivity::class.java)
+        val launcherIntent = Intent(view, EditLocationView::class.java)
             .putExtra("location", location)
         mapIntentLauncher.launch(launcherIntent)
     }
