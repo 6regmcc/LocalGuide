@@ -1,15 +1,12 @@
-package com.example.localguide.activities
+package com.example.localguide.views.reviewlist
 
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.view.Menu
 import android.view.MenuItem
 
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.localguide.R
@@ -23,9 +20,10 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 
 import timber.log.Timber.Forest.i
 
-class ReviewListActivity : AppCompatActivity(), ReviewListener {
+class ReviewListView : AppCompatActivity(), ReviewListener {
     lateinit var app: MainApp
     private var position: Int = 0
+    lateinit var presenter: ReviewListPresenter
     lateinit var allReviews: List<ReviewModel>
     lateinit var myReviews: List<ReviewModel>
     lateinit var switch: SwitchMaterial
@@ -40,15 +38,18 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
 
         app = application as MainApp
 
-        allReviews = app.combinedStore.findAllReviews()
+        presenter = ReviewListPresenter(this)
         myReviews = app.combinedStore.findMyReviews()
+        allReviews = app.combinedStore.findAllReviews()
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ReviewAdapter(allReviews,this)
+        loadReviews()
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
+
+
 
         switch = binding.materialSwitch
         switch.setOnCheckedChangeListener { _, isChecked ->
@@ -73,56 +74,36 @@ class ReviewListActivity : AppCompatActivity(), ReviewListener {
         menuInflater.inflate(R.menu.menu_main, menu)
 
         return super.onCreateOptionsMenu(menu)
-
-
     }
-    override fun onReviewClick(review: ReviewModel, pos : Int) {
-        val launcherIntent = Intent(this, ReviewView::class.java)
-        launcherIntent.putExtra("review_edit", review)
-        position = pos
-        getClickResult.launch(launcherIntent)
-    }
-
-    private val getClickResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.combinedStore.findAllReviews().size)
-            }
-            else
-                if (it.resultCode == 99)     (binding.recyclerView.adapter)?.notifyItemRemoved(position)
-        }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_add -> {
-                val launcherIntent = Intent(this, ReviewView::class.java)
-                getResult.launch(launcherIntent)
-            }
-            R.id.item_map -> {
-                val launcherIntent = Intent(this, ReviewMapsActivity::class.java)
-                mapIntentLauncher.launch(launcherIntent)
-            }
+            R.id.item_add -> { presenter.doAddReview() }
+            R.id.item_map -> { presenter.doShowReviewsMap() }
         }
         return super.onOptionsItemSelected(item)
     }
+    override fun onReviewClick(review: ReviewModel, pos : Int) {
+        this.position = position
+        presenter.doEditReview(review, this.position)
+    }
 
-    private val mapIntentLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        )    { }
+   private fun loadReviews() {
+       binding.recyclerView.adapter = ReviewAdapter(presenter.getReviews(), this)
+       onRefresh()
+   }
 
-    private val getResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.combinedStore.findAllReviews().size)
-            }
-        }
+    fun onRefresh() {
+        binding.recyclerView.adapter?.
+        notifyItemRangeChanged(0,presenter.getReviews().size)
+    }
+
+
+    fun onDelete(position : Int) {
+        binding.recyclerView.adapter?.notifyItemRemoved(position)
+    }
+
+
 
 
 }

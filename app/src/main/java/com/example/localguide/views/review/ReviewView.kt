@@ -1,4 +1,4 @@
-package com.example.localguide.activities
+package com.example.localguide.views.review
 
 import android.content.Intent
 import android.net.Uri
@@ -7,19 +7,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.example.localguide.R
+import com.example.localguide.activities.CreateCategoryActivity
 import com.example.localguide.databinding.ActivityReviewBinding
-import com.example.localguide.main.MainApp
 import com.example.localguide.models.ReviewModel
 import com.google.android.material.snackbar.Snackbar
-import com.example.localguide.helpers.showImagePicker
 import com.example.localguide.models.CategoryModel
-import com.example.localguide.models.Location
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.squareup.picasso.Picasso
 
 

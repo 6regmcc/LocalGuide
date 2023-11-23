@@ -1,4 +1,4 @@
-package com.example.localguide.activities
+package com.example.localguide.views.review
 
 import android.app.Activity
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.localguide.R
+import com.example.localguide.activities.MapActivity
 import com.example.localguide.databinding.ActivityReviewBinding
 import com.example.localguide.helpers.showImagePicker
 import com.example.localguide.main.MainApp

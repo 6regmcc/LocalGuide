@@ -3,14 +3,12 @@ package com.example.localguide.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.localguide.R
 import com.example.localguide.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import android.text.TextUtils
 import android.widget.Toast
-import com.example.localguide.databinding.ActivityRegisterBinding
 import com.example.localguide.main.MainApp
-import com.example.localguide.models.UserModel
+import com.example.localguide.views.reviewlist.ReviewListView
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.Firebase
@@ -102,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        val intent = Intent(this@LoginActivity, ReviewListActivity::class.java)
+        val intent = Intent(this@LoginActivity, ReviewListView::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("user_id", user?.uid)
         intent.putExtra("email", user?.email)

@@ -14,7 +14,7 @@
     android:layout_marginRight="20dp"
     android:layout_marginBottom="20dp"
     app:layout_marginBaseline="20dp"
-    tools:context="com.example.localguide.activities.ReviewView">
+    tools:context="com.example.localguide.views.review.ReviewView">
 
     <RelativeLayout
         android:layout_width="match_parent"

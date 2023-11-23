@@ -1,23 +1,23 @@
-package com.example.localguide.activities
+package com.example.localguide.views.map
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.localguide.databinding.ActivityReviewMapsBinding
 import com.example.localguide.databinding.ContentReviewMapsBinding
 import com.example.localguide.main.MainApp
-import com.google.android.gms.maps.CameraUpdateFactory
+import com.example.localguide.models.ReviewModel
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 
-class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener {
+class ReviewMapView : AppCompatActivity(),  GoogleMap.OnMarkerClickListener {
 
     private lateinit var binding: ActivityReviewMapsBinding
     private lateinit var contentBinding: ContentReviewMapsBinding
-    lateinit var map: GoogleMap
+
     lateinit var app: MainApp
+
+    lateinit var presenter: ReviewMapPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,15 +26,31 @@ class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        presenter = ReviewMapPresenter(this)
+
         contentBinding = ContentReviewMapsBinding.bind(binding.root)
+
         contentBinding.mapView.onCreate(savedInstanceState)
 
         contentBinding.mapView.getMapAsync {
-            map = it
-            configureMap()
+          presenter.doPopulateMap(it)
         }
 
     }
+
+    fun showReview(review: ReviewModel) {
+        contentBinding.currentTitle.text = review.title
+        contentBinding.currentDescription.text = review.body
+        Picasso.get()
+            .load(review.image)
+            .into(contentBinding.currentImage)
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        presenter.doMarkerSelected(marker)
+        return true
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -61,23 +77,6 @@ class ReviewMapsActivity : AppCompatActivity(),  GoogleMap.OnMarkerClickListener
         contentBinding.mapView.onSaveInstanceState(outState)
     }
 
-    private fun configureMap() {
-        map.uiSettings.isZoomControlsEnabled = true
-        map.setOnMarkerClickListener(this)
-        app.combinedStore.findAllReviews().forEach {
-            val loc = LatLng(it.lat, it.lng)
-            val options = MarkerOptions().title(it.title).position(loc)
-            map.addMarker(options)?.tag = it.id
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, it.zoom))
-        }
-    }
-    override fun onMarkerClick(marker: Marker): Boolean {
-        //val placemark = marker.tag as PlacemarkModel
-        val tag = marker.tag as Long
-        val review = app.combinedStore.findReviewById(tag)
-        contentBinding.currentTitle.text = review!!.title
-        contentBinding.currentDescription.text = review!!.body //fix currentDescription.text later
-        Picasso.get().load(review.image).into(contentBinding.currentImage)
-        return false
-    }
+
+
 }
