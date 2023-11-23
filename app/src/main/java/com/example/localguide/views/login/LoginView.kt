@@ -1,4 +1,4 @@
-package com.example.localguide.activities
+package com.example.localguide.views.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +15,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.Firebase
 import timber.log.Timber.Forest.i
 
-class LoginActivity : AppCompatActivity() {
+class LoginView : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
                 TextUtils.isEmpty(binding.userEmailInput.text.toString().trim {it <= ' '}) -> {
                     Toast.makeText(
-                        this@LoginActivity,
+                        this@LoginView,
                         "Please enter email.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
                 TextUtils.isEmpty(binding.userPasswordInput.text.toString().trim {it <= ' '}) -> {
                     Toast.makeText(
-                        this@LoginActivity,
+                        this@LoginView,
                         "Please enter password.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.register.setOnClickListener{
-            startActivity(Intent(this@LoginActivity, RegisterView::class.java))
+            startActivity(Intent(this@LoginView, RegisterView::class.java))
         }
 
 
@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        val intent = Intent(this@LoginActivity, ReviewListView::class.java)
+        val intent = Intent(this@LoginView, ReviewListView::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("user_id", user?.uid)
         intent.putExtra("email", user?.email)

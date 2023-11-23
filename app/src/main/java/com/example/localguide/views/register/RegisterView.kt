@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
-import com.example.localguide.activities.LoginActivity
+import com.example.localguide.views.login.LoginView
 
 import com.example.localguide.databinding.ActivityRegisterBinding
 
@@ -67,7 +67,7 @@ class RegisterView : AppCompatActivity() {
         }
 
         binding.signIn.setOnClickListener{
-            startActivity(Intent(this@RegisterView, LoginActivity::class.java))
+            startActivity(Intent(this@RegisterView, LoginView::class.java))
 
         }
     }
@@ -76,7 +76,7 @@ class RegisterView : AppCompatActivity() {
 
 
     fun updateUI(user: FirebaseUser?) {
-        val intent = Intent(this@RegisterView, LoginActivity::class.java)
+        val intent = Intent(this@RegisterView, LoginView::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("user_id", user?.uid)
         intent.putExtra("email", user?.email)

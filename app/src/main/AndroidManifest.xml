@@ -23,7 +23,7 @@
             android:name=".views.register.RegisterView"
             android:exported="false"></activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".views.login.LoginView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
