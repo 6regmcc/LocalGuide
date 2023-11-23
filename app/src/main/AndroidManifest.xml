@@ -20,7 +20,7 @@
             android:name=".views.createcategory.CreateCategoryView"
             android:exported="false" />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name=".views.register.RegisterView"
             android:exported="false"></activity>
         <activity
             android:name=".activities.LoginActivity"
