@@ -4,6 +4,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.localguide.activities.Home
 import com.example.localguide.views.reviewlist.ReviewListView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -54,7 +55,8 @@ class LoginPresenter (var view: LoginView) {
     }
 
     fun updateUI(user: FirebaseUser?) {
-        val intent = Intent(view, ReviewListView::class.java)
+        //val intent = Intent(view, ReviewListView::class.java)
+        val intent = Intent(view, Home::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("user_id", user?.uid)
         intent.putExtra("email", user?.email)
