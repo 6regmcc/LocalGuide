@@ -1,9 +1,14 @@
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
+
+
+
 }
 
 android {
@@ -12,6 +17,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+
+
 
     defaultConfig {
         applicationId = "com.example.localguide"
@@ -39,6 +47,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
 
 dependencies {
@@ -61,4 +70,12 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.7")
+    implementation("com.google.android.material:material:1.9.0")
+    val nav_version = "2.7.5"
+    val navigationVersion = "2.4.1"
+
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+    implementation ("androidx.preference:preference:1.2.0")
 }

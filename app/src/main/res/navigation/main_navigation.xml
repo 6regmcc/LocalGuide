@@ -9,10 +9,33 @@
         android:id="@+id/leaderboardFragment"
         android:name="com.example.localguide.LeaderboardFragment"
         android:label="fragment_leaderboard"
-        tools:layout="@layout/fragment_leaderboard" />
+        tools:layout="@layout/fragment_leaderboard" >
+        <action
+            android:id="@+id/action_leaderboardFragment_to_myCommentsFragment2"
+            app:destination="@id/myCommentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/myCommentsFragment"
         android:name="com.example.localguide.MyCommentsFragment"
         android:label="fragment_my_comments"
-        tools:layout="@layout/fragment_my_comments" />
+        tools:layout="@layout/fragment_my_comments" >
+
+
+
+        <action
+            android:id="@+id/action_myCommentsFragment_to_leaderboardFragment"
+            app:destination="@id/leaderboardFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="TestArguments"
+            app:argType="string"
+            android:defaultValue="This is working" />
+        <argument
+            android:name="flowStepNumber"
+            app:argType="integer"
+            android:defaultValue="1" />
+    </fragment>
 </navigation>

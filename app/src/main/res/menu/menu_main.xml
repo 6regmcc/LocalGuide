@@ -16,4 +16,9 @@
         android:icon="@android:drawable/ic_menu_mapmode"
         android:title="@string/menu_addReview"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/myCommentsFragment"
+        android:title="MyComments"
+        app:showAsAction="always"/>
 </menu>
