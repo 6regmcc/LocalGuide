@@ -8,6 +8,15 @@ import android.view.ViewGroup
 import com.example.localguide.databinding.FragmentLeaderboardBinding
 import com.example.localguide.databinding.FragmentReviewListBinding
 import com.example.localguide.main.MainApp
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.Composable
+//import androidx.compose.ui.semantics.SemanticsProperties.Text
+
+//import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.ViewCompositionStrategy
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,8 +31,9 @@ private const val ARG_PARAM2 = "param2"
 class ReviewListFragment : Fragment() {
 
     lateinit var app: MainApp
-    private var _fragBinding: FragmentReviewListBinding? = null
-    private val fragBinding get() = _fragBinding!!
+    private var _binding: FragmentReviewListBinding? = null
+    private val binding get() = _binding!!
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -31,6 +41,8 @@ class ReviewListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
+
+
     }
 
     override fun onCreateView(
@@ -39,7 +51,18 @@ class ReviewListFragment : Fragment() {
 
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review_list, container, false)
+        _binding = FragmentReviewListBinding.inflate(inflater, container, false)
+        val view = binding.root
+        binding.composeView.apply {
+            // Dispose of the Composition when the view's LifecycleOwner
+            // is destroyed
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                Text("THis is working")
+            }
+        }
+        return view
+
     }
 
     companion object {
@@ -61,4 +84,8 @@ class ReviewListFragment : Fragment() {
                 }
             }
     }
+
+
+
+
 }

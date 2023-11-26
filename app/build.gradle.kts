@@ -17,8 +17,12 @@ android {
     compileSdk = 34
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.4"
+    }
 
 
 
@@ -79,4 +83,13 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
     implementation ("androidx.preference:preference:1.2.1")
+
+    val activity_version = "1.8.1"
+
+    implementation("androidx.activity:activity:$activity_version")
+    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.ui:ui-framework:0.1.0-dev03")
+
+    val material3_version = "1.1.2"
+    implementation("androidx.compose.material3:material3:$material3_version" )
 }

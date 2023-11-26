@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material3.Text
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -28,6 +30,8 @@ class Home : AppCompatActivity() {
         setContentView(R.layout.home)
         val toolbar = findViewById<Toolbar>(R.id.toolbarHome)
         setSupportActionBar(toolbar)
+
+
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
