@@ -43,7 +43,7 @@ class LeaderboardFragment : Fragment() {
 
         activity?.title = "this is a temp title"
         fragBinding.textView2.text = "fragmet text fiview for leadboard set"
-        fragBinding.toolbar.inflateMenu(R.menu.menu_main)
+        //fragBinding.toolbar.inflateMenu(R.menu.menu_main)
 
         fragBinding.textView2.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_leaderboardFragment_to_myCommentsFragment2, null))
 

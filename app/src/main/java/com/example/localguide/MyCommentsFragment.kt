@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.example.localguide.databinding.FragmentLeaderboardBinding
 import com.example.localguide.databinding.FragmentMyCommentsBinding
 import com.example.localguide.main.MainApp
@@ -12,6 +13,8 @@ import com.example.localguide.main.MainApp
 
 
 class MyCommentsFragment : Fragment() {
+
+
     lateinit var app: MainApp
     private var _fragBinding: FragmentMyCommentsBinding? = null
     private val fragBinding get() = _fragBinding!!

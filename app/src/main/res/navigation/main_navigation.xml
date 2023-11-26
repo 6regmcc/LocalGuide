@@ -30,12 +30,10 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
-            android:name="TestArguments"
-            app:argType="string"
-            android:defaultValue="This is working" />
-        <argument
             android:name="flowStepNumber"
             app:argType="integer"
-            android:defaultValue="1" />
+            android:defaultValue="1"/>
+
+
     </fragment>
 </navigation>
