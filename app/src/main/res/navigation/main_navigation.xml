@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/leaderboardFragment">
+    app:startDestination="@id/reviewListFragment">
 
     <fragment
         android:id="@+id/leaderboardFragment"
@@ -35,5 +35,14 @@
             android:defaultValue="1"/>
 
 
+    </fragment>
+    <fragment
+        android:id="@+id/reviewListFragment"
+        android:name="com.example.localguide.ReviewListFragment"
+        android:label="fragment_review_list"
+        tools:layout="@layout/fragment_review_list" >
+        <action
+            android:id="@+id/action_reviewListFragment_to_myCommentsFragment"
+            app:destination="@id/myCommentsFragment" />
     </fragment>
 </navigation>

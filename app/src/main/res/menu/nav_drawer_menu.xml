@@ -5,8 +5,8 @@
     <group android:id="@+id/primary">
         <item
             android:id="@+id/myCommentsFragment"
-
-            android:title="my Comments" />
+            android:menuCategory="secondary"
+            android:title="my comments" />
     </group>
 </menu>
 

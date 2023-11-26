@@ -1,9 +1,12 @@
 package com.example.localguide.activities
 
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -13,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.localguide.R
 import com.google.android.material.navigation.NavigationView
 
@@ -35,10 +39,24 @@ class Home : AppCompatActivity() {
         val drawerLayout : DrawerLayout? = findViewById(R.id.drawer_layout)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.leaderboardFragment),
+            setOf(R.id.reviewListFragment),
             drawerLayout)
 
         setupActionBar(navController, appBarConfiguration)
+
+        setupNavigationMenu(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val dest: String = try {
+                resources.getResourceName(destination.id)
+            } catch (e: Resources.NotFoundException) {
+                Integer.toString(destination.id)
+            }
+
+            //Toast.makeText(this@Home, "Navigated to $dest",
+                //Toast.LENGTH_SHORT).show()
+            Log.d("NavigationActivity", "Navigated to $dest")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -66,6 +84,14 @@ class Home : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
+    }
+
+    private fun setupNavigationMenu(navController: NavController) {
+
+
+        val sideNavView = findViewById<NavigationView>(R.id.nav_view)
+        sideNavView?.setupWithNavController(navController)
+        // TODO END STEP 9.4
     }
 
 
