@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        google()
+        //google()
+
     }
     dependencies {
         val nav_version = "2.7.5"
@@ -18,5 +19,8 @@ plugins {
 
 
 
+}
+repositories {
+//    google()
 }
 

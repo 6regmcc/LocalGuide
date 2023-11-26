@@ -10,11 +10,12 @@ import com.example.localguide.databinding.FragmentReviewListBinding
 import com.example.localguide.main.MainApp
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.Composable
+
 //import androidx.compose.ui.semantics.SemanticsProperties.Text
 
-//import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ViewCompositionStrategy
 
 
@@ -28,6 +29,17 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ReviewListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+@Preview
+@Composable
+fun GreetingPreview() {
+    Greeting(name = "Android")
+}
 class ReviewListFragment : Fragment() {
 
     lateinit var app: MainApp
@@ -49,7 +61,7 @@ class ReviewListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
 
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentReviewListBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -58,12 +70,13 @@ class ReviewListFragment : Fragment() {
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                Text("THis is working")
+                Greeting(name = "hello hello hleoo lasdfasdfasdfasdf")
             }
         }
         return view
 
     }
+
 
     companion object {
         /**
@@ -84,6 +97,7 @@ class ReviewListFragment : Fragment() {
                 }
             }
     }
+
 
 
 

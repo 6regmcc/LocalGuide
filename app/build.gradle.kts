@@ -62,6 +62,7 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.compose.ui:ui-tooling-preview-android:1.5.4")
 
 
     testImplementation("junit:junit:4.13.2")
@@ -92,4 +93,8 @@ dependencies {
 
     val material3_version = "1.1.2"
     implementation("androidx.compose.material3:material3:$material3_version" )
+
+    //implementation("androidx.compose.ui:ui-tooling:1.8.1")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    //implementation("androidx.compose.ui:ui-tooling-preview:1.8.1")
 }
