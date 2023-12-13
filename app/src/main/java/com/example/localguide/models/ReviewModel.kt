@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class ReviewModel(var id: Long = 0, var title: String = "",
                        var body: String = "", var rating: Double = 0.0,
                        var image: Uri = Uri.EMPTY,
+                       var imageURL: String = "",
                        var lat : Double = 0.0,
                        var lng: Double = 0.0,
                        var zoom: Float = 0f,
