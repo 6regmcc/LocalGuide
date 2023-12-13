@@ -44,5 +44,13 @@
         <action
             android:id="@+id/action_reviewListFragment_to_myCommentsFragment"
             app:destination="@id/myCommentsFragment" />
+        <action
+            android:id="@+id/action_reviewListFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.example.localguide.ReviewFragment"
+        android:label="fragment_review"
+        tools:layout="@layout/fragment_review" />
 </navigation>

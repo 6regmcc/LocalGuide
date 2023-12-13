@@ -40,10 +40,19 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.myapplication.ui.theme.LocalGuideTheme
+import androidx.navigation.ui.setupWithNavController
+import com.example.localguide.R
+import com.example.localguide.activities.Home
+import com.google.android.material.navigation.NavigationView
+import java.security.AccessController.getContext
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -71,7 +80,12 @@ class ReviewListFragment : Fragment() {
 
     lateinit var app: MainApp
     private var _binding: FragmentReviewListBinding? = null
+    private lateinit var navController: NavController
     private val binding get() = _binding!!
+
+    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment()
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +102,8 @@ class ReviewListFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         val reviewData: List<ReviewModel> = app.combinedStore.findAllReviews()
-
+        val navController = findNavController()
+        //navController.navigate(act)
         _binding = FragmentReviewListBinding.inflate(inflater, container, false)
         val view = binding.root
         binding.composeView.apply {
@@ -96,13 +111,14 @@ class ReviewListFragment : Fragment() {
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                 setContent {
+
                     LocalGuideTheme {
                         // A surface container using the 'background' color from the theme
                         Surface(
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            MyApp(reviews = reviewData)
+                            MyApp(reviews = reviewData, navController = navController)
                         }
                     }
             }
@@ -115,23 +131,31 @@ class ReviewListFragment : Fragment() {
 
 }
 
+fun navigateToReview(navController: NavController) {
+    navController.navigate("action_reviewListFragment_to_reviewFragment")
+
+}
+
 @Composable
-private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewModel>) {
+private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewModel>, navController: NavController) {
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
         items(items = reviews) { review ->
-            Review(review = review)
+            Review(review = review, navController = navController)
         }
     }
 
 }
 
 @Composable
-private fun Review(review: ReviewModel) {
+private fun Review(review: ReviewModel, navController: NavController) {
     Surface(color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
         ) {
         Row(){
-            Column(modifier = Modifier.weight(2f).padding(10.dp,).size(75.dp)) {
+            Column(modifier = Modifier
+                .weight(2f)
+                .padding(10.dp,)
+                .size(75.dp)) {
                 AsyncImage(
                     model = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg",
                     placeholder = painterResource(id = R.drawable.ic_launcher_background),
@@ -143,21 +167,28 @@ private fun Review(review: ReviewModel) {
                 )
             }
 
-            Column(modifier = Modifier.padding(10.dp,).weight(5f)) {
+            Column(modifier = Modifier
+                .padding(10.dp,)
+                .weight(5f)) {
                 Text(text = review.title)
                 Text(text = review.body)
+                Button(onClick = {
+                    navController.navigate(R.id.action_reviewListFragment_to_reviewFragment)
+                }) {
+                    Text("Click")
+                }
             }
         }
 
     }
 }
 @Composable
-private fun MyApp(modifier: Modifier = Modifier, reviews: List<ReviewModel>) {
+private fun MyApp(modifier: Modifier = Modifier, reviews: List<ReviewModel>, navController: NavController) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        ReviewLazyList(reviews = reviews)
+        ReviewLazyList(reviews = reviews, navController= navController)
     }
 }
 
@@ -165,6 +196,6 @@ private fun MyApp(modifier: Modifier = Modifier, reviews: List<ReviewModel>) {
 @Composable
 private fun DefaultPreview() {
     LocalGuideTheme {
-        MyApp(reviews = reviewList)
+        //MyApp(reviews = reviewList, navController = NavController(context = getApplicationContext())
     }
 }
