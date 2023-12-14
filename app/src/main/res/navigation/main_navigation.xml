@@ -52,5 +52,9 @@
         android:id="@+id/reviewFragment"
         android:name="com.example.localguide.ReviewFragment"
         android:label="fragment_review"
-        tools:layout="@layout/fragment_review" />
+        tools:layout="@layout/fragment_review" >
+        <argument
+            android:name="reviewId"
+            app:argType="long" />
+    </fragment>
 </navigation>

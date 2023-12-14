@@ -83,7 +83,8 @@ class ReviewListFragment : Fragment() {
     private lateinit var navController: NavController
     private val binding get() = _binding!!
 
-    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment()
+
+    //val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment()
 
 
 
@@ -131,8 +132,9 @@ class ReviewListFragment : Fragment() {
 
 }
 
-fun navigateToReview(navController: NavController) {
-    navController.navigate("action_reviewListFragment_to_reviewFragment")
+fun navigateToReview(navController: NavController, review: ReviewModel) {
+    //val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.id)
+    //navController.navigate(action)
 
 }
 
@@ -173,9 +175,10 @@ private fun Review(review: ReviewModel, navController: NavController) {
                 Text(text = review.title)
                 Text(text = review.body)
                 Button(onClick = {
-                    navController.navigate(R.id.action_reviewListFragment_to_reviewFragment)
+                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.id)
+                    navController.navigate(action)
                 }) {
-                    Text("Click")
+                    Text("Full Review")
                 }
             }
         }
