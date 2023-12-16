@@ -6,7 +6,9 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
-    id("androidx.navigation.safeargs")
+    //id("androidx.navigation.safeargs")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 
 
 
@@ -18,6 +20,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        dataBinding = true
     }
 
     composeOptions {
@@ -99,4 +102,8 @@ dependencies {
     //implementation("androidx.compose.ui:ui-tooling-preview:1.8.1")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("com.google.maps.android:maps-compose:2.4.0")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:20.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }
