@@ -21,11 +21,17 @@ import com.example.localguide.main.MainApp
 import com.example.myapplication.ui.theme.LocalGuideTheme
 import com.google.android.gms.maps.model.LatLng
 import android.Manifest
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -34,13 +40,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
+import coil.compose.AsyncImage
 import com.example.localguide.models.ReviewModel
 import com.example.localguide.ui.ReviewViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -107,17 +117,24 @@ class ReviewFragment : Fragment() {
 @Composable
 fun ReviewScreen(
     reviewViewModel: ReviewViewModel = viewModel(),
-    navController: NavController
+    navController: NavController?
 ){
     val reviewUiState by reviewViewModel.uiState.collectAsState()
-    ReviewFields(
-        onReviewTitleChanged = {reviewViewModel.updateReviewTitle(it)},
-        onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
-        onKeyboardDone = { },
-        editedReviewTitle = reviewViewModel.editedReviewTitle!!,
-        dbRightSuccess = reviewUiState.dbRightSuccess,
-        navController = navController
-    )
+    Column (Modifier.padding(16.dp)){
+        ReviewFields(
+            onReviewTitleChanged = {reviewViewModel.updateReviewTitle(it)},
+            onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
+            onKeyboardDone = { },
+            editedReviewTitle = reviewViewModel.editedReviewTitle!!,
+            dbRightSuccess = reviewUiState.dbRightSuccess,
+            navController = navController!!,
+            onReviewBodyChanged = {reviewViewModel.updateReviewBody(it)},
+            editedReviewBody = reviewViewModel.editedReviewBody!!
+        )
+
+    }
+
+
 
 }
 
@@ -125,10 +142,12 @@ fun ReviewScreen(
 fun ReviewFields(
     reviewViewModel: ReviewViewModel = viewModel(),
     onReviewTitleChanged: (String) -> Unit,
+    onReviewBodyChanged: (String) -> Unit,
     onReviewDbSubmit: () -> Unit,
     onKeyboardDone: () -> Unit,
     modifier: Modifier = Modifier,
     editedReviewTitle: String,
+    editedReviewBody: String,
     dbRightSuccess: Boolean,
     context: Context = LocalContext.current,
     navController: NavController
@@ -162,7 +181,17 @@ fun ReviewFields(
                 onDone = { onKeyboardDone() }
             ),
         )
+        OutlinedTextField(value = editedReviewBody, onValueChange = onReviewBodyChanged)
         Text(text = "test")
+
+        Button(modifier = Modifier.fillMaxWidth(),onClick = {}) {
+            Text(
+                text = "test button",
+                fontSize = 16.sp
+            )
+        }
+
+
         Button(
             modifier = Modifier.fillMaxWidth(),
 
@@ -175,17 +204,40 @@ fun ReviewFields(
                 fontSize = 16.sp
             )
         }
+        ImagePicker()
     }
 
 }
 
 
+@Composable
+private fun ImagePicker(modifier: Modifier = Modifier) {
+    var imageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+
+    val launcher = rememberLauncherForActivityResult(
+        contract =
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
+    Column() {
+        Button(onClick = {
+            launcher.launch("image/*")
+        }) {
+            Text(text = "Pick image")
+        }
+
+    }
+}
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
     LocalGuideTheme {
 
-        //ReviewScreen()
+        //ReviewScreen(navController = null)
     }
 }
 

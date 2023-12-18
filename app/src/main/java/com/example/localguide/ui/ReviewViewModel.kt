@@ -42,6 +42,9 @@ class ReviewViewModel: ViewModel() {
     var editedReviewTitle by mutableStateOf("")
         private set
 
+    var editedReviewBody by mutableStateOf("")
+        private set
+
 
 
 
@@ -52,8 +55,9 @@ class ReviewViewModel: ViewModel() {
         val userId = auth.currentUser!!.uid
 
         val title: String = editedReviewTitle
+        val body: String = editedReviewBody
 
-        val reviewToSave = ReviewDBModel(title = title, userId = userId)
+        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body)
         val childAdd = HashMap<String, Any>()
         childAdd["/reviews/$reviewId"] = reviewToSave
         childAdd["/user-reviews/$userId/$reviewId"] = reviewToSave
@@ -79,6 +83,9 @@ class ReviewViewModel: ViewModel() {
 
     fun updateReviewTitle(reviewTitleEdited: String) {
         editedReviewTitle = reviewTitleEdited
+    }
+    fun updateReviewBody(reviewBodyEdited: String) {
+        editedReviewBody = reviewBodyEdited
     }
 
     fun updateDbRightSuccess() {
