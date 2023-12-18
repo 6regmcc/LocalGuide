@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("androidx.compose.ui:ui-tooling-preview-android:1.5.4")
+    implementation("com.google.firebase:firebase-database:20.3.0")
 
 
     testImplementation("junit:junit:4.13.2")

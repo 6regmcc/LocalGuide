@@ -56,5 +56,8 @@
         <argument
             android:name="reviewId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_reviewFragment_to_reviewListFragment"
+            app:destination="@id/reviewListFragment" />
     </fragment>
 </navigation>

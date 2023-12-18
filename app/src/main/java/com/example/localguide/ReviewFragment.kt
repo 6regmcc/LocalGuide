@@ -21,9 +21,14 @@ import com.example.localguide.main.MainApp
 import com.example.myapplication.ui.theme.LocalGuideTheme
 import com.google.android.gms.maps.model.LatLng
 import android.Manifest
+import android.widget.Toast
+import androidx.compose.Context
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TextField
@@ -32,7 +37,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.findNavController
 import com.example.localguide.models.ReviewModel
 import com.example.localguide.ui.ReviewViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -41,6 +49,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
+
 
 
 var test = "test"
@@ -54,6 +63,7 @@ class ReviewFragment : Fragment() {
     private val args by navArgs<ReviewFragmentArgs>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        app = activity?.application as MainApp
         arguments?.let {
 
         }
@@ -62,9 +72,12 @@ class ReviewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
+
     ): View? {
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
         val view = binding.root
+        val navController = findNavController()
         binding.composeView.apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
@@ -77,7 +90,8 @@ class ReviewFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        ReviewScreen()
+                        ReviewScreen(navController = navController)
+
                     }
                 }
             }
@@ -92,37 +106,77 @@ class ReviewFragment : Fragment() {
 
 @Composable
 fun ReviewScreen(
-    reviewViewModel: ReviewViewModel = viewModel()
+    reviewViewModel: ReviewViewModel = viewModel(),
+    navController: NavController
 ){
     val reviewUiState by reviewViewModel.uiState.collectAsState()
     ReviewFields(
         onReviewTitleChanged = {reviewViewModel.updateReviewTitle(it)},
+        onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
         onKeyboardDone = { },
-        editedReviewTitle =  reviewViewModel.editedReviewTitle
+        editedReviewTitle = reviewViewModel.editedReviewTitle!!,
+        dbRightSuccess = reviewUiState.dbRightSuccess,
+        navController = navController
     )
+
 }
 
 @Composable
 fun ReviewFields(
+    reviewViewModel: ReviewViewModel = viewModel(),
     onReviewTitleChanged: (String) -> Unit,
+    onReviewDbSubmit: () -> Unit,
     onKeyboardDone: () -> Unit,
     modifier: Modifier = Modifier,
     editedReviewTitle: String,
+    dbRightSuccess: Boolean,
+    context: Context = LocalContext.current,
+    navController: NavController
 ) {
-    OutlinedTextField(
-        value = editedReviewTitle,
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
-        onValueChange = onReviewTitleChanged,
-        //label = "review title",
-        isError = false,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { onKeyboardDone() }
-        ),
-    )
+
+    if(dbRightSuccess) {
+
+        Toast.makeText(context,
+            "Review Saved to DB",
+            Toast.LENGTH_LONG).show()
+        val action = ReviewFragmentDirections.actionReviewFragmentToReviewListFragment()
+        onReviewDbSubmit()
+        navController.navigate(action)
+
+
+
+    }
+    Column (Modifier.padding(16.dp)) {
+        Text(text = "test")
+        OutlinedTextField(
+            value = editedReviewTitle,
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = onReviewTitleChanged,
+            //label = "review title",
+            isError = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onKeyboardDone() }
+            ),
+        )
+        Text(text = "test")
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+
+            onClick = {reviewViewModel.saveReviewToDB()
+
+            }
+        ) {
+            Text(
+                text = "Save Review",
+                fontSize = 16.sp
+            )
+        }
+    }
+
 }
 
 
@@ -131,7 +185,7 @@ fun ReviewFields(
 private fun DefaultPreview() {
     LocalGuideTheme {
 
-        ReviewScreen()
+        //ReviewScreen()
     }
 }
 

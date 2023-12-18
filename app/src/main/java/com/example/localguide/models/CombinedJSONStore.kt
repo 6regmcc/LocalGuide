@@ -26,7 +26,8 @@ fun generateRandomId2(): Long {
     return Random().nextLong()
 }
 
-class CombinedJSONStore (private val context: Context): JSONStore {
+class CombinedJSONStore (
+    private val context: Context): JSONStore {
 
      var combinedJSonObj: JSONModel = JSONModel()
      var auth: FirebaseAuth = Firebase.auth
@@ -73,8 +74,8 @@ class CombinedJSONStore (private val context: Context): JSONStore {
 
     }
 
-    override fun findReviewById(id: Long): ReviewModel? {
-       val foundReview: ReviewModel? = combinedJSonObj.reviews.find { it.id == id }
+    override fun findReviewById(id: Long): ReviewModel {
+       val foundReview: ReviewModel = combinedJSonObj.reviews.find { it.id == id }!!
         return foundReview
     }
 
