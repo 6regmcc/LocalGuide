@@ -35,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TextField
@@ -129,7 +130,9 @@ fun ReviewScreen(
             dbRightSuccess = reviewUiState.dbRightSuccess,
             navController = navController!!,
             onReviewBodyChanged = {reviewViewModel.updateReviewBody(it)},
-            editedReviewBody = reviewViewModel.editedReviewBody!!
+            editedReviewBody = reviewViewModel.editedReviewBody!!,
+            showProgressSpinner = reviewUiState.showProgressSpinner
+
         )
 
     }
@@ -144,13 +147,15 @@ fun ReviewFields(
     onReviewTitleChanged: (String) -> Unit,
     onReviewBodyChanged: (String) -> Unit,
     onReviewDbSubmit: () -> Unit,
+
     onKeyboardDone: () -> Unit,
     modifier: Modifier = Modifier,
     editedReviewTitle: String,
     editedReviewBody: String,
     dbRightSuccess: Boolean,
     context: Context = LocalContext.current,
-    navController: NavController
+    navController: NavController,
+    showProgressSpinner: Boolean
 ) {
 
     if(dbRightSuccess) {
@@ -204,31 +209,56 @@ fun ReviewFields(
                 fontSize = 16.sp
             )
         }
-        ImagePicker()
+        ImagePicker(
+            onReviewImageSelected = {reviewViewModel.updateImageUri(it)},
+            //uploadImageToCloudStorage = {reviewViewModel.uploadImageToCloudStorage()}
+            showProgressSpinner = showProgressSpinner,
+            showProgressSpinnerUpdate = {reviewViewModel.showProgressSpinnerUpdate()}
+
+        )
     }
 
 }
 
 
 @Composable
-private fun ImagePicker(modifier: Modifier = Modifier) {
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
+private fun ImagePicker(
+    modifier: Modifier = Modifier,
+    onReviewImageSelected: (Uri?) -> Unit,
+    showProgressSpinner: Boolean,
+    showProgressSpinnerUpdate: () -> Unit
+
+
+) {
+
 
 
     val launcher = rememberLauncherForActivityResult(
         contract =
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        imageUri = uri
+        onReviewImageSelected(uri)
     }
     Column() {
         Button(onClick = {
             launcher.launch("image/*")
+            showProgressSpinnerUpdate()
+
+
+
+
         }) {
             Text(text = "Pick image")
         }
+
+        if (showProgressSpinner) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        }
+
 
     }
 }

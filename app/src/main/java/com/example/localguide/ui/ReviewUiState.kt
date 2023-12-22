@@ -1,5 +1,6 @@
 package com.example.localguide.ui
 
+import android.net.Uri
 import com.example.localguide.models.ReviewModel
 
 data class ReviewUiState(
@@ -8,5 +9,7 @@ data class ReviewUiState(
     val reviewTitle: String = "",
     val reviewBody: String = "",
     val dbRightSuccess: Boolean = false,
-    val dbError: Boolean = false
+    val dbError: Boolean = false,
+    val imageUri: Uri? = null,
+    val showProgressSpinner: Boolean = false
 )

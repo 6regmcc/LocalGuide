@@ -20,11 +20,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
+import java.io.File
 
 class ReviewViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(ReviewUiState())
@@ -34,6 +37,9 @@ class ReviewViewModel: ViewModel() {
     private lateinit var reviewBody: String
     var dbRef: DatabaseReference = FirebaseDatabase.getInstance("https://localguide-402718-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Reviews")
     var auth: FirebaseAuth = Firebase.auth
+    val storage = Firebase.storage("gs://localguide-402718.appspot.com")
+    var storageRef = storage.reference
+    var imagesRef: StorageReference? = storageRef.child("images")
 
     //val exampleReview: ReviewModel = ReviewModel(title="", body="", category = "", rating = 0.0, imageURL = "")
 
@@ -44,6 +50,13 @@ class ReviewViewModel: ViewModel() {
 
     var editedReviewBody by mutableStateOf("")
         private set
+
+    var selectedImageUri by mutableStateOf<Uri?>(null)
+        private set
+
+    var uploadedImageURL by mutableStateOf("")
+        private set
+
 
 
 
@@ -56,8 +69,9 @@ class ReviewViewModel: ViewModel() {
 
         val title: String = editedReviewTitle
         val body: String = editedReviewBody
+        val imageURL: String = uploadedImageURL
 
-        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body)
+        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body, imageURl = imageURL)
         val childAdd = HashMap<String, Any>()
         childAdd["/reviews/$reviewId"] = reviewToSave
         childAdd["/user-reviews/$userId/$reviewId"] = reviewToSave
@@ -66,6 +80,7 @@ class ReviewViewModel: ViewModel() {
             Timber.i("Review Saved to DB")
             _uiState.update { currentState ->
                 currentState.copy(dbRightSuccess = true)
+
             }
        }.addOnFailureListener{
                 err -> Timber.i("DB error is  ${err}")
@@ -88,10 +103,48 @@ class ReviewViewModel: ViewModel() {
         editedReviewBody = reviewBodyEdited
     }
 
+    fun updateImageUri(imageUri: Uri?) {
+        selectedImageUri = imageUri
+        Timber.i("image URI is $selectedImageUri")
+        uploadImageToCloudStorage()
+    }
+
     fun updateDbRightSuccess() {
         _uiState.update { currentState ->
             currentState.copy(dbRightSuccess = false)
         }
+    }
+
+    fun showProgressSpinnerUpdate() {
+        _uiState.update { currentState -> currentState.copy(showProgressSpinner = true) }
+    }
+
+    fun uploadImageToCloudStorage() {
+        var file = selectedImageUri
+        val reviewsRef = storageRef.child("images/${file!!.lastPathSegment}")
+        val uploadTask = reviewsRef.putFile(file!!)
+
+// Register observers to listen for when the download is done or if it fails
+
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            reviewsRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                Timber.i("image URL is $downloadUri")
+                _uiState.update { currentState -> currentState.copy(showProgressSpinner = false)}
+                uploadedImageURL = downloadUri.toString()
+            } else {
+                // Handle failures
+                // ...
+            }
+        }
+
     }
 
 
