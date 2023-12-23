@@ -29,10 +29,7 @@
             app:destination="@id/leaderboardFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
-        <argument
-            android:name="flowStepNumber"
-            app:argType="integer"
-            android:defaultValue="1"/>
+
 
 
     </fragment>

@@ -7,6 +7,10 @@
             android:id="@+id/myCommentsFragment"
             android:menuCategory="secondary"
             android:title="my comments" />
+        <item
+            android:id="@+id/reviewFragment"
+            android:menuCategory="secondary"
+            android:title="Create Review" />
     </group>
 </menu>
 

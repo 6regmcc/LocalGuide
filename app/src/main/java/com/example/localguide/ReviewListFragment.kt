@@ -143,7 +143,7 @@ private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewDB
 }
 
 @Composable
-private fun Review(review: ReviewDBModel, navController: NavController) {
+private fun Review(review: ReviewDBModel, navController: NavController, ) {
     Surface(color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
         ) {
@@ -152,8 +152,11 @@ private fun Review(review: ReviewDBModel, navController: NavController) {
                 .weight(2f)
                 .padding(10.dp,)
                 .size(75.dp)) {
+
+                var model = review.imageURl ?: ""
+
                 AsyncImage(
-                    model = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg",
+                    model = model,
                     placeholder = painterResource(id = R.drawable.ic_launcher_background),
                     error = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = "The delasign logo",
