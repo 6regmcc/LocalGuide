@@ -1,5 +1,6 @@
 package com.example.localguide
 
+import ReviewListViewModel
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
@@ -41,6 +42,8 @@ import coil.request.ImageRequest
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.unit.dp
@@ -53,18 +56,8 @@ import com.example.localguide.R
 import com.example.localguide.activities.Home
 import com.google.android.material.navigation.NavigationView
 import java.security.AccessController.getContext
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ReviewListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.localguide.models.ReviewDBModel
 
 
 var review1: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
@@ -78,7 +71,7 @@ var reviewList: List<ReviewModel> = listOf(review1, review2, review3, review4, r
 
 class ReviewListFragment : Fragment() {
 
-    lateinit var app: MainApp
+    //lateinit var app: MainApp
     private var _binding: FragmentReviewListBinding? = null
     private lateinit var navController: NavController
     private val binding get() = _binding!!
@@ -91,7 +84,7 @@ class ReviewListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
+        //app = activity?.application as MainApp
 
 
     }
@@ -102,9 +95,10 @@ class ReviewListFragment : Fragment() {
 
     ): View {
         // Inflate the layout for this fragment
-        val reviewData: List<ReviewModel> = app.combinedStore.findAllReviews()
+        //val reviewData: List<ReviewModel> = app.combinedStore.findAllReviews()
         val navController = findNavController()
         //navController.navigate(act)
+
         _binding = FragmentReviewListBinding.inflate(inflater, container, false)
         val view = binding.root
         binding.composeView.apply {
@@ -119,7 +113,7 @@ class ReviewListFragment : Fragment() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            MyApp(reviews = reviewData, navController = navController)
+                            MyApp( navController = navController)
                         }
                     }
             }
@@ -139,9 +133,9 @@ fun navigateToReview(navController: NavController, review: ReviewModel) {
 }
 
 @Composable
-private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewModel>, navController: NavController) {
+private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewDBModel>?, navController: NavController) {
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-        items(items = reviews) { review ->
+        items(items = reviews!!) { review ->
             Review(review = review, navController = navController)
         }
     }
@@ -149,7 +143,7 @@ private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewMo
 }
 
 @Composable
-private fun Review(review: ReviewModel, navController: NavController) {
+private fun Review(review: ReviewDBModel, navController: NavController) {
     Surface(color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
         ) {
@@ -172,10 +166,16 @@ private fun Review(review: ReviewModel, navController: NavController) {
             Column(modifier = Modifier
                 .padding(10.dp,)
                 .weight(5f)) {
-                Text(text = review.title)
-                Text(text = review.body)
+                if(review.title != null) {
+                    Text(text = review.title!!)
+                }
+                if(review.body != null) {
+                    Text(text = review.body!!)
+                }
+
+
                 Button(onClick = {
-                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.id)
+                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.reviewId!!.toLong())
                     navController.navigate(action)
                 }) {
                     Text("Full Review")
@@ -186,12 +186,22 @@ private fun Review(review: ReviewModel, navController: NavController) {
     }
 }
 @Composable
-private fun MyApp(modifier: Modifier = Modifier, reviews: List<ReviewModel>, navController: NavController) {
+private fun MyApp(
+    modifier: Modifier = Modifier,
+    reviewListViewModel: ReviewListViewModel = viewModel(),
+    navController: NavController
+) {
+    reviewListViewModel.getAllReviewList()
+    val reviewListUiState by reviewListViewModel.uiState.collectAsState()
+    val reviewList: List<ReviewDBModel>? = reviewListUiState.reviewList?.toList()
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        ReviewLazyList(reviews = reviews, navController= navController)
+        if(reviewList?.isNotEmpty() == true) {
+            ReviewLazyList(reviews = reviewList, navController= navController)
+        }
+
     }
 }
 
