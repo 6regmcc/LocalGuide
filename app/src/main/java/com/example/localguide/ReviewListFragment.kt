@@ -159,7 +159,7 @@ private fun Review(review: ReviewDBModel, navController: NavController, ) {
                     model = model,
                     placeholder = painterResource(id = R.drawable.ic_launcher_background),
                     error = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "The delasign logo",
+                    contentDescription = "Review Logo",
                     contentScale = ContentScale.Crop,
 
 
@@ -178,7 +178,7 @@ private fun Review(review: ReviewDBModel, navController: NavController, ) {
 
 
                 Button(onClick = {
-                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.reviewId!!.toLong())
+                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.reviewId!!)
                     navController.navigate(action)
                 }) {
                     Text("Full Review")

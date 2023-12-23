@@ -22,6 +22,7 @@ class ReviewListViewModel : ViewModel() {
     fun getAllReviewList() {
         Timber.i("get all reviews called")
 
+
         dbRef.child("reviews").addValueEventListener(object: ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {

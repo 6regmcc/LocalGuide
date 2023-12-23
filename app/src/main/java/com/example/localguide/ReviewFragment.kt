@@ -1,5 +1,6 @@
 package com.example.localguide
 
+import ReviewListViewModel
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -52,6 +54,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
+import com.example.localguide.models.ReviewDBModel
 import com.example.localguide.models.ReviewModel
 import com.example.localguide.ui.ReviewViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -63,13 +66,13 @@ import com.google.maps.android.compose.rememberMarkerState
 
 
 
-var test = "test"
 
 class ReviewFragment : Fragment() {
 
     lateinit var app: MainApp
     private var _binding: FragmentReviewBinding? = null
     private lateinit var navController: NavController
+
     private val binding get() = _binding!!
     private val args by navArgs<ReviewFragmentArgs>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,12 +89,16 @@ class ReviewFragment : Fragment() {
 
 
     ): View? {
+        //var reviewViewModel: ReviewViewModel = ReviewViewModel()
+        //reviewViewModel.getReviewById("-NmNNjbn3NuFlsCHBrNC")
+
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
         val view = binding.root
         val navController = findNavController()
         binding.composeView.apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
+
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
 
@@ -101,7 +108,7 @@ class ReviewFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        ReviewScreen(navController = navController)
+                        ReviewScreen(navController = navController, reviewId = args.reviewId)
 
                     }
                 }
@@ -118,22 +125,51 @@ class ReviewFragment : Fragment() {
 @Composable
 fun ReviewScreen(
     reviewViewModel: ReviewViewModel = viewModel(),
-    navController: NavController?
+    navController: NavController?,
+    reviewId: String
+
 ){
     val reviewUiState by reviewViewModel.uiState.collectAsState()
-    Column (Modifier.padding(16.dp)){
-        ReviewFields(
-            onReviewTitleChanged = {reviewViewModel.updateReviewTitle(it)},
-            onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
-            onKeyboardDone = { },
-            editedReviewTitle = reviewViewModel.editedReviewTitle!!,
-            dbRightSuccess = reviewUiState.dbRightSuccess,
-            navController = navController!!,
-            onReviewBodyChanged = {reviewViewModel.updateReviewBody(it)},
-            editedReviewBody = reviewViewModel.editedReviewBody!!,
-            showProgressSpinner = reviewUiState.showProgressSpinner
+    if(!reviewUiState.reviewFound) {
+        reviewViewModel.getReviewById(reviewId)
+    }
 
-        )
+    Column (Modifier.padding(16.dp)){
+        if(reviewUiState.reviewFound) {
+            ReviewFields(
+                onReviewTitleChanged = {reviewViewModel.updateReviewTitleState(it)},
+                onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
+                onKeyboardDone = { },
+                editedReviewTitle = reviewUiState.reviewTitle,
+                dbRightSuccess = reviewUiState.dbRightSuccess,
+                navController = navController!!,
+                onReviewBodyChanged = {reviewViewModel.updateReviewBodyState(it)},
+                editedReviewBody = reviewUiState.reviewBody,
+                showProgressSpinner = reviewUiState.showProgressSpinner,
+                reviewFound = reviewUiState.reviewFound,
+                reviewId = reviewId
+
+            )
+        } else {
+            ReviewFields(
+                onReviewTitleChanged = {reviewViewModel.updateReviewTitle(it)},
+                onReviewDbSubmit = {reviewViewModel.updateDbRightSuccess() },
+                onKeyboardDone = { },
+                editedReviewTitle = reviewViewModel.editedReviewTitle!!,
+                dbRightSuccess = reviewUiState.dbRightSuccess,
+                navController = navController!!,
+                onReviewBodyChanged = {reviewViewModel.updateReviewBody(it)},
+                editedReviewBody = reviewViewModel.editedReviewBody!!,
+                showProgressSpinner = reviewUiState.showProgressSpinner,
+                reviewFound = reviewUiState.reviewFound
+
+            )
+        }
+
+
+
+
+
 
     }
 
@@ -155,7 +191,9 @@ fun ReviewFields(
     dbRightSuccess: Boolean,
     context: Context = LocalContext.current,
     navController: NavController,
-    showProgressSpinner: Boolean
+    showProgressSpinner: Boolean,
+    reviewFound: Boolean,
+    reviewId: String = ""
 ) {
 
     if(dbRightSuccess) {
@@ -171,9 +209,10 @@ fun ReviewFields(
 
     }
     Column (Modifier.padding(16.dp)) {
-        Text(text = "test")
+
         OutlinedTextField(
             value = editedReviewTitle,
+            label = { Text("Title") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = onReviewTitleChanged,
@@ -186,29 +225,40 @@ fun ReviewFields(
                 onDone = { onKeyboardDone() }
             ),
         )
-        OutlinedTextField(value = editedReviewBody, onValueChange = onReviewBodyChanged)
-        Text(text = "test")
-
-        Button(modifier = Modifier.fillMaxWidth(),onClick = {}) {
-            Text(
-                text = "test button",
-                fontSize = 16.sp
-            )
-        }
+        OutlinedTextField(value = editedReviewBody, onValueChange = onReviewBodyChanged,  modifier = Modifier.fillMaxWidth(), label = { Text("Description") },)
 
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
 
-            onClick = {reviewViewModel.saveReviewToDB()
 
+        if(reviewFound) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !showProgressSpinner,
+                onClick = {reviewViewModel.saveReviewUpdateToDB(reviewId)
+
+                }
+            ) {
+                Text(
+                    text = "Update Review",
+                    fontSize = 16.sp
+                )
             }
-        ) {
-            Text(
-                text = "Save Review",
-                fontSize = 16.sp
-            )
+        } else {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !showProgressSpinner,
+                onClick = {reviewViewModel.saveReviewToDB()
+
+                }
+            ) {
+                Text(
+                    text = "Save Review",
+                    fontSize = 16.sp
+                )
+            }
         }
+
+
         ImagePicker(
             onReviewImageSelected = {reviewViewModel.updateImageUri(it)},
             //uploadImageToCloudStorage = {reviewViewModel.uploadImageToCloudStorage()}
@@ -239,21 +289,17 @@ private fun ImagePicker(
     ) { uri: Uri? ->
         onReviewImageSelected(uri)
     }
-    Column() {
+    Row() {
         Button(onClick = {
             launcher.launch("image/*")
             showProgressSpinnerUpdate()
 
-
-
-
         }) {
             Text(text = "Pick image")
         }
-
         if (showProgressSpinner) {
             CircularProgressIndicator(
-                modifier = Modifier.width(64.dp),
+                modifier = Modifier.width(45.dp),
                 color = MaterialTheme.colorScheme.secondary,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
             )

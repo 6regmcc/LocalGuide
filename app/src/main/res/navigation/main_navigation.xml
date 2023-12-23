@@ -52,7 +52,7 @@
         tools:layout="@layout/fragment_review" >
         <argument
             android:name="reviewId"
-            app:argType="long" />
+            app:argType="string" />
         <action
             android:id="@+id/action_reviewFragment_to_reviewListFragment"
             app:destination="@id/reviewListFragment" />

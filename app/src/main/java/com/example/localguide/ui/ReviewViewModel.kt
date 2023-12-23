@@ -2,8 +2,10 @@ package com.example.localguide.ui
 
 import android.app.Application
 import android.net.Uri
+import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.localguide.main.MainApp
@@ -29,21 +31,18 @@ import kotlinx.coroutines.flow.update
 import timber.log.Timber
 import java.io.File
 
+
 class ReviewViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(ReviewUiState())
     val uiState: StateFlow<ReviewUiState> = _uiState.asStateFlow()
-    lateinit var app: MainApp
-    private lateinit var reviewTitle: String
-    private lateinit var reviewBody: String
+    //lateinit var app: MainApp
+    //private lateinit var reviewTitle: String
+    // lateinit var reviewBody: String
     var dbRef: DatabaseReference = FirebaseDatabase.getInstance("https://localguide-402718-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Reviews")
     var auth: FirebaseAuth = Firebase.auth
     val storage = Firebase.storage("gs://localguide-402718.appspot.com")
     var storageRef = storage.reference
-    var imagesRef: StorageReference? = storageRef.child("images")
 
-    //val exampleReview: ReviewModel = ReviewModel(title="", body="", category = "", rating = 0.0, imageURL = "")
-
-    //val currentReview: ReviewModel = getCurrentReview(4217002262694485753)
 
     var editedReviewTitle by mutableStateOf("")
         private set
@@ -58,7 +57,26 @@ class ReviewViewModel: ViewModel() {
         private set
 
 
+    fun getReviewById(reviewId: String){
 
+        dbRef.child("reviews").child(reviewId).addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val review  = snapshot.getValue(ReviewDBModel::class.java)
+                Timber.i("Found Review ${review} ")
+                _uiState.update { currentState ->
+                    currentState.copy(reviewFound = true)
+
+                }
+                setReviewFields(review)
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Timber.i("Error getting review by id ")
+            }
+        }
+        )
+    }
 
 
 
@@ -69,9 +87,9 @@ class ReviewViewModel: ViewModel() {
 
         val title: String = editedReviewTitle
         val body: String = editedReviewBody
-        val imageURL: String = uploadedImageURL
+        val imageURL: String = uiState.value.imageURL ?: ""
 
-        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body, imageURl = imageURL)
+        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body, imageURl = imageURL, reviewId = reviewId)
         val childAdd = HashMap<String, Any>()
         childAdd["/reviews/$reviewId"] = reviewToSave
         childAdd["/user-reviews/$userId/$reviewId"] = reviewToSave
@@ -85,20 +103,68 @@ class ReviewViewModel: ViewModel() {
        }.addOnFailureListener{
                 err -> Timber.i("DB error is  ${err}")
 
-
        }
 
+    }
+
+    fun saveReviewUpdateToDB(reviewId:String) {
+        val userId = auth.currentUser!!.uid
+        val reviewToSave = ReviewDBModel(title = uiState.value.reviewTitle, body = uiState.value.reviewBody, imageURl = uiState.value.imageURL, reviewId = reviewId, userId = userId)
+        val childUpdate : MutableMap<String, Any?> = HashMap()
+        childUpdate["reviews/$reviewId"] = reviewToSave
+
+        dbRef.updateChildren(childUpdate).addOnCompleteListener {
+            Timber.i("Successfully updated review ")
+            _uiState.update { currentState ->
+                currentState.copy(dbRightSuccess = true)
+
+            }
+        }.addOnFailureListener {
+            Timber.i("Error saving reivew ")
+        }
+    }
+
+
+    private fun setReviewFields(review: ReviewDBModel?) {
+
+        if (review != null) {
+            updateReviewTitleState(review.title!!)
+            updateReviewBodyState(review.body!!)
+        }
+
+
+
+        Timber.i("review title ${_uiState.value.reviewTitle}")
+        Timber.i("Review Saved to DB ${_uiState.value.reviewBody}")
+        Timber.i("Review found ${_uiState.value.reviewFound}")
 
 
 
 
 
+
+
+    }
+
+    fun updateReviewTitleState(reviewTitle: String){
+        if(reviewTitle != null) {
+            _uiState.update { currentState -> currentState.copy(reviewTitle = reviewTitle) }
+        }
+    }
+
+
+    fun updateReviewBodyState(reviewBody: String) {
+        if(reviewBody != null) {
+            _uiState.update { currentState -> currentState.copy(reviewBody = reviewBody) }
+            Timber.i("review body state being updated ${_uiState.value.reviewBody}")
+        }
 
     }
 
     fun updateReviewTitle(reviewTitleEdited: String) {
         editedReviewTitle = reviewTitleEdited
     }
+
     fun updateReviewBody(reviewBodyEdited: String) {
         editedReviewBody = reviewBodyEdited
     }
@@ -119,7 +185,7 @@ class ReviewViewModel: ViewModel() {
         _uiState.update { currentState -> currentState.copy(showProgressSpinner = true) }
     }
 
-    fun uploadImageToCloudStorage() {
+    private fun uploadImageToCloudStorage() {
         var file = selectedImageUri
         val reviewsRef = storageRef.child("images/${file!!.lastPathSegment}")
         val uploadTask = reviewsRef.putFile(file!!)
@@ -139,6 +205,7 @@ class ReviewViewModel: ViewModel() {
                 Timber.i("image URL is $downloadUri")
                 _uiState.update { currentState -> currentState.copy(showProgressSpinner = false)}
                 uploadedImageURL = downloadUri.toString()
+                _uiState.update { currentState -> currentState.copy(imageURL = uploadedImageURL) }
             } else {
                 // Handle failures
                 // ...

@@ -1,3 +1,4 @@
+
 package com.example.localguide.ui
 
 import android.net.Uri
@@ -11,5 +12,8 @@ data class ReviewUiState(
     val dbRightSuccess: Boolean = false,
     val dbError: Boolean = false,
     val imageUri: Uri? = null,
-    val showProgressSpinner: Boolean = false
+    val showProgressSpinner: Boolean = false,
+    val reviewFound: Boolean = false,
+    val enableReviewEdit: Boolean = false,
+    val imageURL: String? = ""
 )
