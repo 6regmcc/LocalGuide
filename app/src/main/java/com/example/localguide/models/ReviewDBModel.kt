@@ -10,4 +10,7 @@ data class ReviewDBModel(
     val body: String? = null,
     val uri: Uri? = null,
     val imageURl: String? = null,
-    val userId: String? = null)
+    val userId: String? = null,
+    val latitude: String? = "",
+    val longitude: String? = "",
+    )

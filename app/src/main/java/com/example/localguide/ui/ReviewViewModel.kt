@@ -1,18 +1,13 @@
 package com.example.localguide.ui
 
-import android.app.Application
+
 import android.net.Uri
-import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.localguide.main.MainApp
-
-
 import com.example.localguide.models.ReviewDBModel
-
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -21,23 +16,21 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
-import java.io.File
+import java.lang.Float.parseFloat
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class ReviewViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(ReviewUiState())
     val uiState: StateFlow<ReviewUiState> = _uiState.asStateFlow()
-    //lateinit var app: MainApp
-    //private lateinit var reviewTitle: String
-    // lateinit var reviewBody: String
+
     var dbRef: DatabaseReference = FirebaseDatabase.getInstance("https://localguide-402718-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Reviews")
     var auth: FirebaseAuth = Firebase.auth
     val storage = Firebase.storage("gs://localguide-402718.appspot.com")
@@ -65,8 +58,8 @@ class ReviewViewModel: ViewModel() {
                 Timber.i("Found Review ${review} ")
                 _uiState.update { currentState ->
                     currentState.copy(reviewFound = true)
-
                 }
+                isLoggedInUserOwnerOfReview(review?.userId!!)
                 setReviewFields(review)
 
             }
@@ -88,8 +81,10 @@ class ReviewViewModel: ViewModel() {
         val title: String = editedReviewTitle
         val body: String = editedReviewBody
         val imageURL: String = uiState.value.imageURL ?: ""
+        val latitude = uiState.value.latitude
+        val longitude =  uiState.value.longitude
 
-        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body, imageURl = imageURL, reviewId = reviewId)
+        val reviewToSave = ReviewDBModel(title = title, userId = userId, body = body, imageURl = imageURL, reviewId = reviewId, latitude = latitude, longitude = longitude)
         val childAdd = HashMap<String, Any>()
         childAdd["/reviews/$reviewId"] = reviewToSave
         childAdd["/user-reviews/$userId/$reviewId"] = reviewToSave
@@ -109,7 +104,7 @@ class ReviewViewModel: ViewModel() {
 
     fun saveReviewUpdateToDB(reviewId:String) {
         val userId = auth.currentUser!!.uid
-        val reviewToSave = ReviewDBModel(title = uiState.value.reviewTitle, body = uiState.value.reviewBody, imageURl = uiState.value.imageURL, reviewId = reviewId, userId = userId)
+        val reviewToSave = ReviewDBModel(title = uiState.value.reviewTitle, body = uiState.value.reviewBody, imageURl = uiState.value.imageURL, reviewId = reviewId, userId = userId, longitude = uiState.value.longitude, latitude = uiState.value.latitude)
         val childUpdate : MutableMap<String, Any?> = HashMap()
         childUpdate["reviews/$reviewId"] = reviewToSave
 
@@ -131,12 +126,25 @@ class ReviewViewModel: ViewModel() {
             updateReviewTitleState(review.title!!)
             updateReviewBodyState(review.body!!)
             updateReviewImageURL(review.imageURl!!)
+            if(review.latitude != "" && review.longitude != ""   ) {
+                _uiState.update { currentState -> currentState.copy(latitude = review.latitude) }
+                _uiState.update { currentState -> currentState.copy(longitude = review.longitude) }
+                _uiState.update { currentState -> currentState.copy(isLocationValue = true) }
+            }
+
+
 
         }
         Timber.i("review title ${_uiState.value.reviewTitle}")
         Timber.i("Review Saved to DB ${_uiState.value.reviewBody}")
         Timber.i("Review found ${_uiState.value.reviewFound}")
 
+    }
+
+    fun isLoggedInUserOwnerOfReview(reviewUserId: String) {
+        if ( auth.currentUser!!.uid == reviewUserId) {
+            _uiState.update { currentState -> currentState.copy(isLoggedInUserIsOwnerOfReview = true) }
+        }
     }
 
     fun updateReviewTitleState(reviewTitle: String){
@@ -158,6 +166,18 @@ class ReviewViewModel: ViewModel() {
         if(imageURL != null ) {
             _uiState.update { currentState -> currentState.copy(imageURL = imageURL) }
         }
+    }
+
+    fun updateLatLon(latLon: LatLng) {
+
+        var latitude = latLon.latitude.toString()
+        var longitude = latLon.longitude.toString()
+        Timber.i("lat =  ${latitude} and longitude = ${longitude} ")
+        _uiState.update { currentState -> currentState.copy(latitude = latitude) }
+        _uiState.update { currentState -> currentState.copy(longitude = longitude) }
+        _uiState.update { currentState -> currentState.copy(isLocationValue = true) }
+
+
     }
 
     fun updateReviewTitle(reviewTitleEdited: String) {

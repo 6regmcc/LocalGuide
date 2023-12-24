@@ -22,6 +22,7 @@ import com.example.localguide.main.MainApp
 import com.example.myapplication.ui.theme.LocalGuideTheme
 import com.google.android.gms.maps.model.LatLng
 import android.Manifest
+import android.location.Location
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -55,6 +56,7 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.example.localguide.models.ReviewDBModel
+import com.example.localguide.ui.ReviewUiState
 
 import com.example.localguide.ui.ReviewViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -69,7 +71,7 @@ import com.google.maps.android.compose.rememberMarkerState
 
 class ReviewFragment : Fragment() {
 
-    //lateinit var app: MainApp
+
     private var _binding: FragmentReviewBinding? = null
     private lateinit var navController: NavController
 
@@ -77,10 +79,7 @@ class ReviewFragment : Fragment() {
     private val args by navArgs<ReviewFragmentArgs>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //app = activity?.application as MainApp
-       // arguments?.let {
-        //
-       // }
+
     }
 
     override fun onCreateView(
@@ -89,15 +88,13 @@ class ReviewFragment : Fragment() {
 
 
     ): View? {
-        //var reviewViewModel: ReviewViewModel = ReviewViewModel()
-        //reviewViewModel.getReviewById("-NmNNjbn3NuFlsCHBrNC")
+
 
         _binding = FragmentReviewBinding.inflate(inflater, container, false)
         val view = binding.root
         val navController = findNavController()
         binding.composeView.apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
+
             val reviewId: String
             if (args.reviewId != null ) {
                 reviewId = args.reviewId.toString()
@@ -153,7 +150,14 @@ fun ReviewScreen(
                 editedReviewBody = reviewUiState.reviewBody,
                 showProgressSpinner = reviewUiState.showProgressSpinner,
                 reviewFound = reviewUiState.reviewFound,
-                reviewId = reviewId
+                reviewId = reviewId,
+                isFieldEnabled = reviewUiState.isLoggedInUserIsOwnerOfReview,
+                latitude = reviewUiState.latitude,
+                longitude = reviewUiState.longitude,
+                isLocationValue = reviewUiState.isLocationValue,
+                reviewUiState = reviewUiState
+
+
 
             )
         } else {
@@ -167,7 +171,12 @@ fun ReviewScreen(
                 onReviewBodyChanged = {reviewViewModel.updateReviewBody(it)},
                 editedReviewBody = reviewViewModel.editedReviewBody!!,
                 showProgressSpinner = reviewUiState.showProgressSpinner,
-                reviewFound = reviewUiState.reviewFound
+                reviewFound = reviewUiState.reviewFound,
+                isFieldEnabled = true,
+                latitude = reviewUiState.latitude,
+                longitude = reviewUiState.longitude,
+                isLocationValue = reviewUiState.isLocationValue,
+                reviewUiState = reviewUiState
 
             )
         }
@@ -183,7 +192,7 @@ fun ReviewFields(
     onReviewTitleChanged: (String) -> Unit,
     onReviewBodyChanged: (String) -> Unit,
     onReviewDbSubmit: () -> Unit,
-
+    reviewUiState: ReviewUiState,
     onKeyboardDone: () -> Unit,
     modifier: Modifier = Modifier,
     editedReviewTitle: String,
@@ -193,7 +202,12 @@ fun ReviewFields(
     navController: NavController,
     showProgressSpinner: Boolean,
     reviewFound: Boolean,
-    reviewId: String? = ""
+    reviewId: String? = "",
+    isFieldEnabled: Boolean,
+    latitude: String?,
+    longitude: String?,
+    isLocationValue: Boolean
+
 ) {
 
     if(dbRightSuccess) {
@@ -211,6 +225,7 @@ fun ReviewFields(
     Column (Modifier.padding(16.dp)) {
 
         OutlinedTextField(
+            enabled = isFieldEnabled,
             value = editedReviewTitle,
             label = { Text("Title") },
             singleLine = true,
@@ -225,12 +240,12 @@ fun ReviewFields(
                 onDone = { onKeyboardDone() }
             ),
         )
-        OutlinedTextField(value = editedReviewBody, onValueChange = onReviewBodyChanged,  modifier = Modifier.fillMaxWidth(), label = { Text("Description") },)
+        OutlinedTextField(enabled = isFieldEnabled, value = editedReviewBody, onValueChange = onReviewBodyChanged,  modifier = Modifier.fillMaxWidth(), label = { Text("Description") },)
 
 
 
 
-        if(reviewFound) {
+        if(reviewFound && isFieldEnabled) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !showProgressSpinner,
@@ -243,7 +258,20 @@ fun ReviewFields(
                     fontSize = 16.sp
                 )
             }
-        } else {
+        } else if(reviewFound) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                enabled = false,
+                onClick = {reviewViewModel.saveReviewUpdateToDB(reviewId!!)
+
+                }
+            ) {
+                Text(
+                    text = "Update Review",
+                    fontSize = 16.sp
+                )
+            }
+        }else {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !showProgressSpinner,
@@ -260,12 +288,22 @@ fun ReviewFields(
 
 
         ImagePicker(
+
             onReviewImageSelected = {reviewViewModel.updateImageUri(it)},
             //uploadImageToCloudStorage = {reviewViewModel.uploadImageToCloudStorage()}
             showProgressSpinner = showProgressSpinner,
-            showProgressSpinnerUpdate = {reviewViewModel.showProgressSpinnerUpdate()}
+            showProgressSpinnerUpdate = {reviewViewModel.showProgressSpinnerUpdate()},
+            isFieldEnabled = isFieldEnabled
 
         )
+
+        ComposeGoogleMap(
+            updateLatLon = {reviewViewModel.updateLatLon(it)},
+            latitude = latitude,
+            longitude = longitude,
+            isLocationValue = isLocationValue,
+            reviewUiState = reviewUiState
+            )
     }
 
 }
@@ -276,7 +314,8 @@ private fun ImagePicker(
     modifier: Modifier = Modifier,
     onReviewImageSelected: (Uri?) -> Unit,
     showProgressSpinner: Boolean,
-    showProgressSpinnerUpdate: () -> Unit
+    showProgressSpinnerUpdate: () -> Unit,
+    isFieldEnabled: Boolean
 
 
 ) {
@@ -290,7 +329,8 @@ private fun ImagePicker(
         onReviewImageSelected(uri)
     }
     Row() {
-        Button(onClick = {
+        Button(enabled = isFieldEnabled,onClick = {
+
             launcher.launch("image/*")
             showProgressSpinnerUpdate()
 
@@ -317,9 +357,17 @@ private fun DefaultPreview() {
     }
 }
 
-/*
+
 @Composable
-private fun ComposeGoogleMap() {
+private fun ComposeGoogleMap(
+    updateLatLon: (LatLng) -> Unit,
+    latitude: String?,
+    longitude: String?,
+    isLocationValue: Boolean,
+    reviewUiState: ReviewUiState
+
+) {
+
     var location = LatLng(53.32754351898156, -6.304286867380142,)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 16f)
@@ -327,17 +375,25 @@ private fun ComposeGoogleMap() {
 
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
+        onMapLongClick = updateLatLon,
     ) {
-        val markerState = rememberMarkerState(position = location)
-        Marker(
-            state = markerState,
-            draggable = true
-        )
+        if(isLocationValue) {
+
+            val updatedLocation = LatLng(reviewUiState.latitude?.toDouble()!!, reviewUiState.longitude?.toDouble()!! )
+
+            println("marker re-running and isLocationValue = $isLocationValue and lat log is $updatedLocation")
+            val markerState = MarkerState(position = updatedLocation)
+
+            Marker(
+                state = markerState,
+                draggable = true
+            )
+
+        }
 
     }
 
 }
 
 
- */

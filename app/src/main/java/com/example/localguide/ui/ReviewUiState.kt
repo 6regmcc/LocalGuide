@@ -2,6 +2,7 @@
 package com.example.localguide.ui
 
 import android.net.Uri
+import com.google.android.gms.maps.model.LatLng
 
 
 data class ReviewUiState(
@@ -15,5 +16,9 @@ data class ReviewUiState(
     val showProgressSpinner: Boolean = false,
     val reviewFound: Boolean = false,
     val enableReviewEdit: Boolean = false,
-    val imageURL: String? = ""
+    val imageURL: String? = "",
+    val isLoggedInUserIsOwnerOfReview: Boolean = false,
+    val latitude: String? = "",
+    val longitude: String? = "",
+    val isLocationValue: Boolean = false
 )
