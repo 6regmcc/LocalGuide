@@ -178,7 +178,7 @@ private fun Review(review: ReviewDBModel, navController: NavController, ) {
 
 
                 Button(onClick = {
-                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.reviewId!!)
+                    val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(reviewId = review.reviewId!!,true)
                     navController.navigate(action)
                 }) {
                     Text("Full Review")

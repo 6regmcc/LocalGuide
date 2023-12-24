@@ -69,7 +69,7 @@ import com.google.maps.android.compose.rememberMarkerState
 
 class ReviewFragment : Fragment() {
 
-    lateinit var app: MainApp
+    //lateinit var app: MainApp
     private var _binding: FragmentReviewBinding? = null
     private lateinit var navController: NavController
 
@@ -77,10 +77,10 @@ class ReviewFragment : Fragment() {
     private val args by navArgs<ReviewFragmentArgs>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
-        arguments?.let {
-
-        }
+        //app = activity?.application as MainApp
+       // arguments?.let {
+        //
+       // }
     }
 
     override fun onCreateView(
@@ -113,7 +113,7 @@ class ReviewFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        ReviewScreen(navController = navController, reviewId = reviewId)
+                        ReviewScreen(navController = navController, reviewId = reviewId, isEdit = args.isEdit)
 
                     }
                 }
@@ -131,12 +131,13 @@ class ReviewFragment : Fragment() {
 fun ReviewScreen(
     reviewViewModel: ReviewViewModel = viewModel(),
     navController: NavController?,
-    reviewId: String? = ""
+    reviewId: String? = "",
+    isEdit: Boolean
 
 ){
     val reviewUiState by reviewViewModel.uiState.collectAsState()
-    if(!reviewUiState.reviewFound) {
-        reviewViewModel.getReviewById(reviewId!!)
+    if(!reviewUiState.reviewFound && isEdit) {
+       reviewViewModel.getReviewById(reviewId!!)
     }
 
     Column (Modifier.padding(16.dp)){
