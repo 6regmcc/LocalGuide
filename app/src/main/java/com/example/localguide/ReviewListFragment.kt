@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.example.localguide.databinding.FragmentLeaderboardBinding
 import com.example.localguide.databinding.FragmentReviewListBinding
 import com.example.localguide.main.MainApp
-import com.example.localguide.models.CombinedJSONStore
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column

@@ -36,7 +36,7 @@
     <fragment
         android:id="@+id/reviewListFragment"
         android:name="com.example.localguide.ReviewListFragment"
-        android:label="fragment_review_list"
+        android:label="Review List"
         tools:layout="@layout/fragment_review_list" >
         <action
             android:id="@+id/action_reviewListFragment_to_myCommentsFragment"
@@ -48,11 +48,13 @@
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.example.localguide.ReviewFragment"
-        android:label="fragment_review"
+        android:label="View And Edit Review"
         tools:layout="@layout/fragment_review" >
         <argument
             android:name="reviewId"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue='""' />
         <action
             android:id="@+id/action_reviewFragment_to_reviewListFragment"
             app:destination="@id/reviewListFragment" />

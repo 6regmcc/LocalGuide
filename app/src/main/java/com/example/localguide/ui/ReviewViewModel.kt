@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.localguide.main.MainApp
-import com.example.localguide.models.CombinedJSONStore
+
 
 import com.example.localguide.models.ReviewDBModel
 import com.example.localguide.models.ReviewModel
@@ -130,19 +130,12 @@ class ReviewViewModel: ViewModel() {
         if (review != null) {
             updateReviewTitleState(review.title!!)
             updateReviewBodyState(review.body!!)
+            updateReviewImageURL(review.imageURl!!)
+
         }
-
-
-
         Timber.i("review title ${_uiState.value.reviewTitle}")
         Timber.i("Review Saved to DB ${_uiState.value.reviewBody}")
         Timber.i("Review found ${_uiState.value.reviewFound}")
-
-
-
-
-
-
 
     }
 
@@ -159,6 +152,12 @@ class ReviewViewModel: ViewModel() {
             Timber.i("review body state being updated ${_uiState.value.reviewBody}")
         }
 
+    }
+
+    fun updateReviewImageURL(imageURL: String){
+        if(imageURL != null ) {
+            _uiState.update { currentState -> currentState.copy(imageURL = imageURL) }
+        }
     }
 
     fun updateReviewTitle(reviewTitleEdited: String) {

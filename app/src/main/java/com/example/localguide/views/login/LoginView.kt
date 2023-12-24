@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.localguide.main.MainApp
 import com.example.localguide.views.register.RegisterView
-import com.example.localguide.views.reviewlist.ReviewListView
+
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.Firebase

@@ -98,7 +98,12 @@ class ReviewFragment : Fragment() {
         binding.composeView.apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
-
+            val reviewId: String
+            if (args.reviewId != null ) {
+                reviewId = args.reviewId.toString()
+            } else {
+                reviewId = ""
+            }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
 
@@ -108,7 +113,7 @@ class ReviewFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        ReviewScreen(navController = navController, reviewId = args.reviewId)
+                        ReviewScreen(navController = navController, reviewId = reviewId)
 
                     }
                 }
@@ -126,12 +131,12 @@ class ReviewFragment : Fragment() {
 fun ReviewScreen(
     reviewViewModel: ReviewViewModel = viewModel(),
     navController: NavController?,
-    reviewId: String
+    reviewId: String? = ""
 
 ){
     val reviewUiState by reviewViewModel.uiState.collectAsState()
     if(!reviewUiState.reviewFound) {
-        reviewViewModel.getReviewById(reviewId)
+        reviewViewModel.getReviewById(reviewId!!)
     }
 
     Column (Modifier.padding(16.dp)){
@@ -165,12 +170,6 @@ fun ReviewScreen(
 
             )
         }
-
-
-
-
-
-
     }
 
 
@@ -193,7 +192,7 @@ fun ReviewFields(
     navController: NavController,
     showProgressSpinner: Boolean,
     reviewFound: Boolean,
-    reviewId: String = ""
+    reviewId: String? = ""
 ) {
 
     if(dbRightSuccess) {
@@ -234,7 +233,7 @@ fun ReviewFields(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !showProgressSpinner,
-                onClick = {reviewViewModel.saveReviewUpdateToDB(reviewId)
+                onClick = {reviewViewModel.saveReviewUpdateToDB(reviewId!!)
 
                 }
             ) {

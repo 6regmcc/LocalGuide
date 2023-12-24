@@ -15,11 +15,11 @@ import timber.log.Timber
 
 class RegisterPresenter (val view: RegisterView) {
     private lateinit var auth: FirebaseAuth
-    var app: MainApp
+    //var app: MainApp
     private lateinit var loginIntentLauncher: ActivityResultLauncher<Intent>
 
     init {
-        app = view.application as MainApp
+       // app = view.application as MainApp
         auth = Firebase.auth
         registerLoginIntentLauncher()
     }
@@ -43,7 +43,7 @@ class RegisterPresenter (val view: RegisterView) {
                         userToSave.userEmailAddress = firebaseUser.email.toString()
                     }
 
-                    app.combinedStore.createUser(userToSave)
+                    //app.combinedStore.createUser(userToSave)
                     Toast.makeText(
                         view,
                         "Account Registered Successfully.",
