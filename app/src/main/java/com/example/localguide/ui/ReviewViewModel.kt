@@ -12,7 +12,7 @@ import com.example.localguide.main.MainApp
 
 
 import com.example.localguide.models.ReviewDBModel
-import com.example.localguide.models.ReviewModel
+
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth

@@ -55,7 +55,7 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.example.localguide.models.ReviewDBModel
-import com.example.localguide.models.ReviewModel
+
 import com.example.localguide.ui.ReviewViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap

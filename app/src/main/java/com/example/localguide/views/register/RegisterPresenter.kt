@@ -5,8 +5,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.localguide.views.login.LoginView
-import com.example.localguide.main.MainApp
-import com.example.localguide.models.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -34,14 +32,8 @@ class RegisterPresenter (val view: RegisterView) {
                     val firebaseUser = auth.currentUser
                     Timber.i("User id is ${firebaseUser?.uid}")
                     Timber.i("User email is ${firebaseUser?.email}")
-                    val userToSave = UserModel()
-                    userToSave.userName = name
-                    if (firebaseUser != null) {
-                        userToSave.userId = firebaseUser.uid
-                    }
-                    if (firebaseUser != null) {
-                        userToSave.userEmailAddress = firebaseUser.email.toString()
-                    }
+
+
 
                     //app.combinedStore.createUser(userToSave)
                     Toast.makeText(

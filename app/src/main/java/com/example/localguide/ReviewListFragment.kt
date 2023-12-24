@@ -27,7 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import com.example.localguide.models.ReviewModel
+
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -60,12 +60,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.localguide.models.ReviewDBModel
 
 
-var review1: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
-var review2: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
-var review3: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
-var review4: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
-var review5: ReviewModel = ReviewModel(title="Pips Cafe", body="Home of the breakfast roll challenge ", category = "Cafe", rating = 3.0, imageURL = "https://i.postimg.cc/q7pFy6zK/2019-06-27.jpg")
-var reviewList: List<ReviewModel> = listOf(review1, review2, review3, review4, review5)
+
 
 
 
@@ -126,11 +121,7 @@ class ReviewListFragment : Fragment() {
 
 }
 
-fun navigateToReview(navController: NavController, review: ReviewModel) {
-    //val action = ReviewListFragmentDirections.actionReviewListFragmentToReviewFragment(review.id)
-    //navController.navigate(action)
 
-}
 
 @Composable
 private fun ReviewLazyList( modifier: Modifier = Modifier, reviews:List<ReviewDBModel>?, navController: NavController) {
